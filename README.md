@@ -9,8 +9,8 @@ This project provides a robust and comprehensive set of functions for various us
 # Table of Contents
 
 - [Event](#event)
-    - [event.on](#eventon)
-    - [event.emit](#eventemit)
+    - [event.on](#%EF%B8%8F-eventon-eventname-string-func-function-void)
+    - [event.emit](#%EF%B8%8F-eventemit-eventname-string-func-function-void)
 - [Functions](#functions)
   - [Function1](#function1)
   - [Function2](#function2)
