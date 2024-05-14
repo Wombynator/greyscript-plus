@@ -550,10 +550,26 @@ __scope = function()
     //   sum
     //   values
 
+    // Adds a key-value pair to a map.
+    // @description **Description:**
+    // @description - Adds a key-value pair to the map object. The key is added to the list of keys in the map, and the key-value pair is stored in the map.
+    //
+    // @description **Parameters:**
+    // @param {string} key
+    // @description `key: string` The key to add to the map.
+    // @param {any} value
+    // @description `value: any` The value to associate with the key in the map.
+    //
+    // @description **Returns:**
+    // @return {map}
+    // @description `map` The map object with the new key-value pair added.
+    //
+    // @example myMap = map.add("name", "Alice")
+    // @example print myMap["name"]  // prints "Alice"
     map.add = function(key, value)
         m = self
         m.push(key)
-        m.key = value
+        m[key] = value
         return m
     end function
 
@@ -764,13 +780,11 @@ __scope = function()
     // @example print "😀".encode_utf8 // prints "0xF09F9880"
     string.encodeUtf8 = function
         data = self
-        if data[:2] == "0b" or data[:2] == "0x" or data[:2] == "0o" or data.to_int isa number then
+        if (data[:2] == "0b" or data[:2] == "0x" or data[:2] == "0o" or data.to_int isa number) and not data == " " then
             utf16_code_point = data.to_int
         else 
             utf16_code_point = code(data)
         end if
-
-        0b1111111
 
         if utf16_code_point <= "0x7F".to_int then
             // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
@@ -845,7 +859,7 @@ __scope = function()
         for byte in data
             binary_string = binary_string + code(byte).to_bin[2:].zfill(8)
         end for
-        binary_string = binary_string.zfill(binary_string.len + (6 - binary_string.len % 6) % 6)
+        binary_string = binary_string.reverse.zfill(binary_string.len + (6 - binary_string.len % 6) % 6).reverse
         encoded = ""
         for i in range(0, len(binary_string)-1, 6)
             byte_segment = ("0b" + binary_string[i:i+6]).to_int
