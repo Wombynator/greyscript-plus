@@ -37,14 +37,17 @@ event.on("userLogin", @loginUserFunction)
 
 ---
 ### ✔️ `event.emit (eventName: string): void`
-### Description
-- Triggers all functions associated with a specific event.
-### Example
+Triggers all functions associated with a specific event.
+### Description:
+- This function triggers the execution of all callback functions registered for a specific event name (`eventName`).
+- If the event name is not found within the list of registered events, a warning is logged. Otherwise, it iterates through the list of functions associated with the event and executes them.
+### Parameters:
+- `eventName: string` The name of the event to be emitted.
+### Example:
 ```lua
-event.on("userLogin", @loginUserFunction)
+event.emit("userLogin")
 ```
-*Registers `loginUserFunction` to be called when `userLogin` event is emitted*
-✔️ **event.emit** 
+*Triggers execution of all functions registered under `userLogin` event*
 
 ## Logger
 ✔️ **logger.info** Logs an informational message.<br>
