@@ -6,11 +6,45 @@ Library to enhance GreyScript
 
 This project provides a robust and comprehensive set of functions for various use cases, including cryptography, event handling, logging mechanisms and general-purpose utilities.
 
+# Table of Contents
+
+- [Event](#event)
+    - [event.on](#eventon)
+    - [event.emit](#eventemit)
+- [Functions](#functions)
+  - [Function1](#function1)
+  - [Function2](#function2)
+  - [Function3](#function3)
+  - [Function4](#function4)
+- [Contributing](#contributing)
+- [License](#license)
+
 # Modules and Functions
 
 ## Event
-✔️ **event.on** Registers a function to be called when a specific event is triggered.<br>
-✔️ **event.emit** Triggers all functions associated with a specific event.
+### ✔️ `event.on (eventName: string, func: function): void`
+Registers a function to be called when a specific event is triggered.
+### Description:
+- This function allows registering one or more callback functions (`func`) to be executed when an event with the specified name (`eventName`) is emitted.
+### Parameters:
+- `eventName: string` The name of the event to which the function is to be registered.
+- `func: function` The callback function to be executed when the event is emitted.
+### Example:
+```lua
+event.on("userLogin", @loginUserFunction)
+```
+*Registers `loginUserFunction` to be called when `userLogin` event is emitted*
+
+---
+### ✔️ `event.emit (eventName: string): void`
+### Description
+- Triggers all functions associated with a specific event.
+### Example
+```lua
+event.on("userLogin", @loginUserFunction)
+```
+*Registers `loginUserFunction` to be called when `userLogin` event is emitted*
+✔️ **event.emit** 
 
 ## Logger
 ✔️ **logger.info** Logs an informational message.<br>
