@@ -93,3 +93,42 @@ event.emit("userLogin")
 ✔️ **string.endsWith** Checks if a string ends with the specified substring.<br>
 ✔️ **string.color** Applies a color to a string using both hexadecimal codes and named colors.<br>
 ✔️ **string.mark** Applies a highlight to a string using both hexadecimal codes and named colors.
+
+## Colormap
+- A global color map accessible via dot notation. For example, `print colorMap.red` would output the hexadecimal color code `#FF0000`.
+
+Color | Code | Preview
+--- | --- | ---
+red | #FF0000 | ![Alt Tag](https://img.shields.io/badge/%20-FF0000)
+maroon | #800000 | ![Alt Tag](https://img.shields.io/badge/%20-800000)
+brown | #856256 | ![Alt Tag](https://img.shields.io/badge/%20-856256)
+tomato | #FF5533 | ![Alt Tag](https://img.shields.io/badge/%20-FF5533)
+chocolate | #D2691E | ![Alt Tag](https://img.shields.io/badge/%20-D2691E)
+orange | #FFAA00 | ![Alt Tag](https://img.shields.io/badge/%20-FFAA00)
+gold | #C3A200 | ![Alt Tag](https://img.shields.io/badge/%20-C3A200)
+yellow | #FFFF00 | ![Alt Tag](https://img.shields.io/badge/%20-FFFF00)
+light green | #90EE90 | ![Alt Tag](https://img.shields.io/badge/%20-90EE90)
+olive | #808000 | ![Alt Tag](https://img.shields.io/badge/%20-808000)
+green | #008000 | ![Alt Tag](https://img.shields.io/badge/%20-008000)
+alien | #55DD00 | ![Alt Tag](https://img.shields.io/badge/%20-55DD00)
+lime | #00FF00 | ![Alt Tag](https://img.shields.io/badge/%20-00FF00)
+cyan | #00FFFF | ![Alt Tag](https://img.shields.io/badge/%20-00FFFF)
+turquoise | #40E0D0 | ![Alt Tag](https://img.shields.io/badge/%20-40E0D0)
+teal | #008080 | ![Alt Tag](https://img.shields.io/badge/%20-008080)
+light blue | #ADD8E6 | ![Alt Tag](https://img.shields.io/badge/%20-ADD8E6)
+deep sky blue | #55AAFF | ![Alt Tag](https://img.shields.io/badge/%20-55AAFF)
+blue | #0000FF | ![Alt Tag](https://img.shields.io/badge/%20-0000FF)
+slate blue | #6A5ACD | ![Alt Tag](https://img.shields.io/badge/%20-6A5ACD)
+navy | #000080 | ![Alt Tag](https://img.shields.io/badge/%20-000080)
+midnight blue | #191970 | ![Alt Tag](https://img.shields.io/badge/%20-191970)
+indigo | #4B0082 | ![Alt Tag](https://img.shields.io/badge/%20-4B0082)
+purple | #800080 | ![Alt Tag](https://img.shields.io/badge/%20-800080)
+magenta | #FF00FF | ![Alt Tag](https://img.shields.io/badge/%20-FF00FF)
+violet | #EE82EE | ![Alt Tag](https://img.shields.io/badge/%20-EE82EE)
+orchid | #DD99CC | ![Alt Tag](https://img.shields.io/badge/%20-DD99CC)
+salmon | #FA8072 | ![Alt Tag](https://img.shields.io/badge/%20-FA8072)
+pink | #FFC0CB | ![Alt Tag](https://img.shields.io/badge/%20-FFC0CB)
+black | #000000 | ![Alt Tag](https://img.shields.io/badge/%20-000000)
+gray | #808080 | ![Alt Tag](https://img.shields.io/badge/%20-808080)
+silver | #A8ABAE | ![Alt Tag](https://img.shields.io/badge/%20-A8ABAE)
+white | #FFFFFF | ![Alt Tag](https://img.shields.io/badge/%20-FFFFFF)

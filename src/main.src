@@ -828,6 +828,7 @@ __scope = function()
     decoded_text = ""
     i = 0
 
+    encoded_text = self
     // Decode each character in the input text
     while i < len(encoded_text)
         if encoded_text[i] != "%" then
@@ -843,7 +844,8 @@ __scope = function()
                 if i < len(encoded_text) and encoded_text[i] != "%" then break // Next character is not part of the current encoded sequence
                 if i >= len(encoded_text) then break // Reached the end of the string
             end while
-
+            
+            print ("0x" + bytes_sequence).to_int
             decoded_char = ("0x" + bytes_sequence).to_int.decodeUtf8  // Convert accumulated bytes back to character
             decoded_text = decoded_text + decoded_char
         end if
@@ -1507,119 +1509,4 @@ end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
 
-
-gsp = {
-    "utils" : {
-        // Conversion utilities
-        "base64" : {
-            "encode" : @encode(data),
-            "decode" : @decode(data),
-        },
-
-        // Cryptography utilities
-        "sha256" : @hash,
-        "sha512" : @hash,
-        "md5" : @md5,
-        "aes128" : {
-            "encrypt" : @encrypt(data, key),
-            "decrypt" : @decrypt(data, key),
-        },
-
-        // Data serialization
-        "json" : {
-            "parse" : @parse(jsonString),
-            "stringify" : @stringify(map),
-        },
-        "grfon" : {
-            "parse" : @parse(grfonString),
-            "stringify" : @stringify(map),
-        },
-        "xml" : {
-            "parse" : @parse(xmlString),
-            "stringify" : @stringify(map),
-        },
-        "yaml" : {
-            "parse" : @parse(yamlString),
-            "stringify" : @stringify(map),
-        },
-        "csv" : {
-            "parse" : @parse(csvString, delimiter),
-            "stringify" : @stringify(list, delimiter),
-        },
-    },
-
-    // Time and timing utilities
-    "deltatime" : 0,
-    "timer" : 0,
-
-    // Shell utilities
-    "shell" : {
-        "history" : {},
-        "current" : @getCurrent,
-        "connect" : @connect(host),
-    },
-
-    // Validation utilities
-    "validate" : {
-        "ip" : @ip(ipAddress),
-        "email" : @email(emailAddress),
-        "url" : @url(urlString),
-    },
-
-    // Networking utilities
-    "net" : {
-        "put" : @put(url, data),
-        "get" : @get(url),
-    },
-
-    // Compression utilities
-    "zip" : @zip(filePath, destination),
-    "unzip" : @unzip(filePath, destination),
-
-    // Math and geometry utilities
-    "math" : {
-        "vector2d" : {
-            "add" : @add(v1, v2),
-            "subtract" : @subtract(v1, v2),
-            "dot" : @dot(v1, v2),
-        },
-        "matrix" : {
-            "multiply" : @multiply(m1, m2),
-            "inverse" : @inverse(matrix),
-        },
-        "random" : {
-            "uniform" : @uniform(min, max),
-            "normal" : @normal(mean, stdDev),
-        },
-    },
-
-    // System utilities
-    "system" : {
-        "env" : {
-            "get" : @get(variableName),
-            "set" : @set(variableName, value),
-        },
-        "process" : {
-            "info" : @info(),
-            "getID" : @getID(),
-            "start" : @start(processName, args),
-            "kill" : @kill(processID),
-            "communicate" : @communicate(processID, message),
-        },
-        "hardware" : {
-            "cpuInfo" : @cpuInfo(),
-            "memoryInfo" : @memoryInfo(),
-            "diskInfo" : @diskInfo(),
-        },
-    },
-
-    // AI and machine learning utilities
-    "ai" : {
-        "createModel" : @createModel(layers),
-        "loadModel" : @loadModel(filepath),
-        "trainModel" : @trainModel(model, filepathTrainingData),
-        "saveModel" : @saveModel(model, filepath),
-        "evaluateModel" : @evaluateModel(model, data, filepathTrainingData),
-        "predictModel" : @predictModel(model, data),
-    },
-}
+print colorMap.red
