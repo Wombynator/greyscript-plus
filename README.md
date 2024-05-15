@@ -116,7 +116,7 @@ logger.info("main", "Info message...")
 
 Color | Code | Preview
 --- | --- | ---
-red | #FF0000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF0000)
+red | #FF0000 | <img src="https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF0000" alt="Badge" class="non-clickable">
 maroon | #800000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-800000)
 brown | #856256 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-856256)
 tomato | #FF5533 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF5533)
@@ -149,3 +149,9 @@ black | #000000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E
 gray | #808080 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-808080)
 silver | #A8ABAE | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-A8ABAE)
 white | #FFFFFF | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FFFFFF)
+
+<style>
+.non-clickable {
+    pointer-events: none;
+}
+</style>
