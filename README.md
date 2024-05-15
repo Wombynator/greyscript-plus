@@ -67,11 +67,12 @@ event.emit("userLogin")
 
 ## String
 ✔️ **string.bytes** Converts a string into an array of bytes.<br>
-✔️ **string.encodeUtf8** Encodes a single character to its UTF-8 representation.<br>
+✔️ **string.encodeUtf8** Encodes a string to its UTF-8 representation.<br>
+✔️ **string.decodeUtf8** Decodes a string from its UTF-8 representation.<br>
 ✔️ **string.encodeUrl** Encodes a string to Url format.<br>
-❌ **string.decodeUrl** Decodes a string from Url format.<br>
+✔️ **string.decodeUrl** Decodes a string from Url format.<br>
 ✔️ **string.encodeBase64** Encodes a string to Base 64.<br>
-❌ **string.decodeBase64** Decodes a string from Base 64.<br>
+✔️ **string.decodeBase64** Decodes a string from Base 64.<br>
 ✔️ **string.to_oct** Converts the string representation of a number into its octal form.<br>
 ✔️ **string.to_bin** Converts the string representation of a number into its binary form.<br>
 ✔️ **string.to_hex** Converts the string representation of a number into its hexadecimal form.<br>

@@ -416,7 +416,7 @@ __scope = function()
         if logger.state != "normal" then
             logMsg = ("[" + time + "]").color("alien") + " " + "Info:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("alien")
             print logMsg
-            logger.file.append(logMsg.removeTags)
+            //logger.file.append(logMsg.removeTags)
         end if
     end function
 
@@ -440,7 +440,7 @@ __scope = function()
         if logger.state != "normal" then
             logMsg = ("[" + time + "]").color("alien") + " " + "Debug:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("deep sky blue")
             print logMsg
-            logger.file.append(logMsg.removeTags)
+            //logger.file.append(logMsg.removeTags)
         end if
     end function
 
@@ -464,7 +464,7 @@ __scope = function()
         if logger.state == "trace" then
             logMsg = ("[" + time + "]").color("alien") + " " + "Trace:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("orchid")
             print logMsg
-            logger.file.append(logMsg.removeTags)
+            //logger.file.append(logMsg.removeTags)
         end if
     end function
 
@@ -488,7 +488,7 @@ __scope = function()
         if logger.state != "normal" then
             logMsg = ("[" + time + "]").color("alien") + " " + "Warn:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("orange")
             print logMsg
-            logger.file.append(logMsg.removeTags)
+            //logger.file.append(logMsg.removeTags)
         end if
     end function
 
@@ -511,7 +511,7 @@ __scope = function()
     logger.error = function(source, message)
         logMsg = ("[" + time + "]").color("alien") + " " + "Error:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("tomato")
         print logMsg
-        logger.file.append(logMsg.removeTags)
+        //logger.file.append(logMsg.removeTags)
     end function
 
     // Logs a fatal error message.
@@ -533,7 +533,7 @@ __scope = function()
     logger.fatal = function(source, message)
         logMsg = ("[" + time + "]").color("alien") + " " + "Fatal:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("white").mark("red")
         print logMsg
-        logger.file.append(logMsg.removeTags)
+        //logger.file.append(logMsg.removeTags)
     end function
 
     // Map
@@ -770,43 +770,117 @@ __scope = function()
     // @example print "$".encode_utf8   // prints "0x24"
     // @example
     // @example // For a character within U+0080 to U+07FF: 
-    // @example print "£".encode_utf8   // prints "0xC2A3"
+    // @example print "£".encode_utf8   // prints "0xC20xA3"
     // @example
     // @example // For a character within U+0800 to U+FFFF: 
-    // @example print "€".encode_utf8  // prints "0xE282AC"
+    // @example print "€".encode_utf8  // prints "0xE20x820xAC"
     // @example
     // @example // !!! Throws Runtime error in script !!!
     // @example // For a character within U+10000 to U+10FFFF:
-    // @example print "😀".encode_utf8 // prints "0xF09F9880"
+    // @example print "😀".encode_utf8 // prints "0xF00x9F0x980x80"
     string.encodeUtf8 = function
-        data = self
-        if (data[:2] == "0b" or data[:2] == "0x" or data[:2] == "0o" or data.to_int isa number) and not data == " " then
-            utf16_code_point = data.to_int
-        else 
-            utf16_code_point = code(data)
-        end if
+        encoded_bytes = []
+        for data in self
+            if (data[:2] == "0b" or data[:2] == "0x" or data[:2] == "0o" or data.to_int isa number) and not data == " " then
+                utf16_code_point = data.to_int
+            else 
+                utf16_code_point = code(data)
+            end if
 
-        if utf16_code_point <= "0x7F".to_int then
-            // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
-            return utf16_code_point.to_hex
-        else if utf16_code_point <= "0x7FF".to_int then
-            // For U+0080 to U+07FF, UTF-8 uses two bytes: 110xxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(11)
-            return ("0b110" + utf16_code_point[:5] + "10" + utf16_code_point[5:]).to_hex
-        else if utf16_code_point <= "0xFFFF".to_int then
-            // For U+0800 to U+FFFF, UTF-8 uses three bytes: 1110xxxx 10xxxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(16)
-            return ("0b1110" + utf16_code_point[:4] + "10" + utf16_code_point[4:10] + "10" + utf16_code_point[10:]).to_hex
-        else if utf16_code_point <= "0x10FFFF".to_int then
-            // For U+10000 to U+10FFFF, UTF-8 uses four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(21)
-            return ("0b11110" + utf16_code_point[:3] + "10" + utf16_code_point[3:9] + "10" + utf16_code_point[9:15] + "10" + utf16_code_point[15:]).to_hex
-        else
-            // Out of Unicode range
-            return null
-        end if
+            if utf16_code_point <= "0x7F".to_int then
+                // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
+                encoded_bytes.push(utf16_code_point.to_hex)
+            else if utf16_code_point <= "0x7FF".to_int then
+                // For U+0080 to U+07FF, UTF-8 uses two bytes: 110xxxxx 10xxxxxx
+                utf16_code_point = utf16_code_point.to_bin[2:].zfill(11)
+                encoded_bytes.push(("0b110" + utf16_code_point[:5]).to_hex + ("0b10" + utf16_code_point[5:]).to_hex)
+            else if utf16_code_point <= "0xFFFF".to_int then
+                // For U+0800 to U+FFFF, UTF-8 uses three bytes: 1110xxxx 10xxxxxx 10xxxxxx
+                utf16_code_point = utf16_code_point.to_bin[2:].zfill(16)
+                encoded_bytes.push(("0b1110" + utf16_code_point[:4]).to_hex + ("0b10" + utf16_code_point[4:10]).to_hex + ("0b10" + utf16_code_point[10:]).to_hex)
+            else if utf16_code_point <= "0x10FFFF".to_int then // !!! Throws Runtime error in script !!!
+                // For U+10000 to U+10FFFF, UTF-8 uses four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+                utf16_code_point = utf16_code_point.to_bin[2:].zfill(21)
+                encoded_bytes.push(("0b11110" + utf16_code_point[:3]).to_hex + ("0b10" + utf16_code_point[3:9]).to_hex + ("0b10" + utf16_code_point[9:15]).to_hex + ("0b10" + utf16_code_point[15:]).to_hex)
+            else
+                // Out of Unicode range
+                logger.error("string.encodeUtf8", "FormatError: The input '" + self + "' is out of range.")
+                encoded_bytes.push("0x00")
+            end if
+        end for
+        return encoded_bytes.join("")
     end function
 
+    // Decodes a UTF-8 encoded string.
+    // @description **Description:**
+    // @description - Converts a string of UTF-8 encoded bytes into its corresponding Unicode characters. The function processes 1-byte, 2-byte, and 3-byte UTF-8 sequences and appends the decoded characters to the result string.
+    // @description - Since 4-byte characters are currently not supported by Greyscript, it logs an error if it encounters an unsupported 4-byte character or an invalid byte sequence.
+    //
+    // @description **Parameters:**
+    // @description None. The function operates on the string object it is called on (`self`), which must be a string of UTF-8 encoded bytes.
+    //
+    // @description **Returns:**
+    // @return {string}
+    // @description `string` The decoded string containing Unicode characters.
+    //
+    // @example print "0x480x650x6C0x6C0x6F".decodeUtf8 // prints "Hello"
+    // @example print "0xE20x820xAC".decodeUtf8         // prints "€"
+    string.decodeUtf8 = function
+        utf8_bytes = self
+        decoded_chars = []
+        i = 0
+        
+        while i < len(utf8_bytes)
+            byte = utf8_bytes[i:i+4].to_int
+            
+            if (byte & "0b10000000".to_int) == 0 then  // 1-byte character
+                decoded_chars.push(char(byte))
+            else if (byte & "0b11100000".to_int) == "0b11000000".to_int then  // 2-byte character
+                byte_sequence = (byte & "0b00011111".to_int) << 6
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                decoded_chars.push(char(byte_sequence))
+            else if (byte & "0b11110000".to_int) == "0b11100000".to_int then  // 3-byte character
+                byte_sequence = (byte & "0b00001111".to_int) << 12
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 6
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                decoded_chars.push(char(byte_sequence))
+            else if (byte & "0b11111000".to_int) == "0b11110000".to_int then  // 4-byte character
+                logger.error("string.decodeUtf8", "FormatError: The bytes '" + utf8_bytes[i:i+4*4] + "' from input '" + self + "' are a 4-byte character and are currently not supported in greyscript.") // !!! Throws Runtime error in script !!!
+                i = i + 4*4
+                continue
+                byte_sequence = (byte & "0b00000111".to_int) << 18
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 12
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 6
+                i = i + 4
+                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                decoded_chars.push(char(byte_sequence))
+            else
+                logger.error("string.decodeUtf8", "FormatError: The byte '" + utf8_bytes[i:i+4] + "' from input '" + self + "' is out of range.")
+            end if
+            i = i + 4
+        end while
+        return decoded_chars.join("")
+    end function
+
+    // Converts a string to a URL-encoded format using UTF-8 encoding for non-safe characters.
+    // @description **Description:**
+    // @description - Checks if each character is within the set of URL-safe characters.
+    // @description - If not, the character is converted to its UTF-8 hexadecimal representation.
+    //
+    // @description **Parameters:**
+    // @description None. The function operates on the string object it is called on (`self`).
+    //
+    // @description **Returns:**
+    // @return {string}
+    // @description `string` The URL-encoded string.
+    //
+    // @example print "Hello World!".encodeUrl           // prints "Hello%20World%21"
+    // @example print "data=50&user=test user".encodeUrl // prints "data%3D50%26user%3Dtest%20user"
     string.encodeUrl = function
         safe_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~"
         
@@ -815,49 +889,74 @@ __scope = function()
             if c.isIn(safe_characters) then
                 encoded_string = encoded_string + c
             else
-                bin_str = c.encodeUtf8.bytes
-                for bin in bin_str
-                    encoded_string = encoded_string + "%" + bin.to_hex[2:]
-                end for
+                encoded_string = encoded_string + c.encodeUtf8.replace("0x","%")
             end if
         end for
         return encoded_string
     end function
 
+    // Decodes a URL-encoded string back into its original format.
+    // @description **Description:**
+    // @description - Iterates through the URL-encoded string and decodes each percent-encoded sequence into its original characters.
+    // @description - Supports decoding multi-byte UTF-8 encoded characters.
+    //
+    // @description **Parameters:**
+    // @description None. The function operates on the string object it is called on (`self`).
+    //
+    // @description **Returns:**
+    // @return {string}
+    // @description `string` The URL-decoded string.
+    //
+    // @example print "Hello%20World%21".decodeUrl               // prints "Hello World!"
+    // @example print "data%3D50%26user%3Dtest%20user".decodeUrl // prints "data=50&user=test user"
     string.decodeUrl = function
-    decoded_text = ""
-    i = 0
+        decoded_text = ""
+        i = 0
 
-    encoded_text = self
-    // Decode each character in the input text
-    while i < len(encoded_text)
-        if encoded_text[i] != "%" then
-            decoded_text = decoded_text + encoded_text[i]  // Add unencoded character
-            i = i + 1
-        else
-            // Collect all parts of a multi-byte character
-            bytes_sequence = ""
-            while i < len(encoded_text) and encoded_text[i] == "%"
-                hex_value = encoded_text[i+1:i+3]
-                bytes_sequence = bytes_sequence + hex_value
-                i = i + 3
-                if i < len(encoded_text) and encoded_text[i] != "%" then break // Next character is not part of the current encoded sequence
-                if i >= len(encoded_text) then break // Reached the end of the string
-            end while
-            
-            print ("0x" + bytes_sequence).to_int
-            decoded_char = ("0x" + bytes_sequence).to_int.decodeUtf8  // Convert accumulated bytes back to character
-            decoded_text = decoded_text + decoded_char
-        end if
-    end while
-
-    return decoded_text
+        encoded_text = self
+        // Decode each character in the input text
+        while i < len(encoded_text)
+            if encoded_text[i] != "%" then
+                if encoded_text[i] != char(0) then decoded_text = decoded_text + encoded_text[i]  // Add unencoded character
+                i = i + 1
+            else
+                // Collect all parts of a multi-byte character
+                bytes_sequence = ""
+                while i < len(encoded_text) and encoded_text[i] == "%"
+                    hex_value = encoded_text[i:i+3]
+                    bytes_sequence = bytes_sequence + hex_value
+                    i = i + 3
+                    if i < len(encoded_text) and encoded_text[i] != "%" then break // Next character is not part of the current encoded sequence
+                    if i >= len(encoded_text) then break // Reached the end of the string
+                end while
+                
+                decoded_char = (bytes_sequence.replace("%","0x")).decodeUtf8  // Convert accumulated bytes back to character
+                decoded_text = decoded_text + decoded_char
+            end if
+        end while
+        return decoded_text
     end function
 
+    // Encodes a string into Base64 format.
+    // @description **Description:**
+    // @description - Converts each character in the input string into its ASCII binary equivalent, concatenates them into a single binary string.
+    // @description - Reverses the binary string temporarily to pad it on the right until its length is a multiple of 6 bits, then reverts the order for encoding.
+    // @description - Splits the padded binary string into 6-bit segments and uses each segment to look up a corresponding character in a Base64 character set.
+    // @description - Appends '=' to the result to make the final string length a multiple of 4.
+    //
+    // @description **Parameters:**
+    // @description None. The function operates on the string object it is called on (`self`).
+    //
+    // @description **Returns:**
+    // @return {string}
+    // @description `string` The encoded string in Base64 format.
+    //
+    // @example print "hello".encodeBase64()    // prints "aGVsbG8="
+    // @example print "Greyscript".encodeBase64() // prints "R3JleXNjcmlwdA=="
     string.encodeBase64 = function
         base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
         binary_string = ""
-		data = self.encodeUrl
+		data = self
         for byte in data
             binary_string = binary_string + code(byte).to_bin[2:].zfill(8)
         end for
@@ -886,7 +985,7 @@ __scope = function()
             byte_segment = ("0b" + binary_string[i:i+8]).to_int
             decoded = decoded + char(byte_segment)
         end for
-        return decoded
+        return decoded.decodeUrl
     end function
 
     // Converts the string representation of a number into its octal form.
@@ -904,7 +1003,7 @@ __scope = function()
     // @example print "0x123".to_oct  // prints "0o443" (hexadecimal to octal conversion)
     // @example print "123".to_oct    // prints "0o173" (decimal to octal conversion)
     string.to_oct = function
-    oct_digits = "01234567"
+        oct_digits = "01234567"
         oct_result = ""
         if self.startsWith("0b") then
             if self == "0b0" then return "0o0"
@@ -939,24 +1038,24 @@ __scope = function()
     // @example print "0x1A".to_bin  // prints "0b11010" (hexadecimal to binary conversion)
     // @example print "10".to_bin    // prints "0b1010" (decimal to binary conversion)
     string.to_bin = function
-    binary_mapping = {
-                "0": "0000",
-                "1": "0001",
-                "2": "0010",
-                "3": "0011",
-                "4": "0100",
-                "5": "0101",
-                "6": "0110",
-                "7": "0111",
-                "8": "1000",
-                "9": "1001",
-                "A": "1010",
-                "B": "1011",
-                "C": "1100",
-                "D": "1101",
-                "E": "1110",
-                "F": "1111",}
-    binary_str = ""
+        binary_mapping = {
+                    "0": "0000",
+                    "1": "0001",
+                    "2": "0010",
+                    "3": "0011",
+                    "4": "0100",
+                    "5": "0101",
+                    "6": "0110",
+                    "7": "0111",
+                    "8": "1000",
+                    "9": "1001",
+                    "A": "1010",
+                    "B": "1011",
+                    "C": "1100",
+                    "D": "1101",
+                    "E": "1110",
+                    "F": "1111",}
+        binary_str = ""
         if self.startsWith("0o") then
             if self == "0o0" then return "0b0"
             for digit in self[2:]
@@ -1508,5 +1607,3 @@ __scope = function()
 end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
-
-print colorMap.red
