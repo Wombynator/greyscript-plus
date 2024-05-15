@@ -116,7 +116,7 @@ logger.info("main", "Info message...")
 
 Color | Code | Preview
 --- | --- | ---
-red | #FF0000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF0000)
+red | #FF0000 | [![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF0000)]()
 maroon | #800000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-800000)
 brown | #856256 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-856256)
 tomato | #FF5533 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FF5533)
