@@ -149,3 +149,9 @@ black | #000000 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E
 gray | #808080 | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-808080)
 silver | #A8ABAE | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-A8ABAE)
 white | #FFFFFF | ![](https://img.shields.io/badge/%E3%85%A4%E3%85%A4%E3%85%A4%E3%85%A4-FFFFFF)
+
+<style>
+.non-clickable {
+    pointer-events: none;
+}
+</style>
