@@ -733,25 +733,38 @@ __scope = function()
     // @return {list|null}
     // @description `list` An array of strings, each representing an 8-bit byte in binary format (`0b` prefix). Returns `null` if the input format is unrecognized or if the input is not a string.
     //
-    // @example print "0xFF".bytes          // prints ["0b11111111"]
-    // @example print "123".bytes           // prints ["0b01111011"]
-    // @example print "0b1010".bytes        // prints ["0b00001010"]
+    // @example print "0xFF".bytes         // prints ["0b11111111"]
+    // @example print "123".bytes          // prints ["0b01111011"]
+    // @example print "0b1010".bytes       // prints ["0b00001010"]
     // @example print "€".encodeUtf8.bytes // prints ["0b11100010", "0b10000010", "0b10101100"]
-    // @example print "Hello".bytes         // prints null.
+    // @example print "Hello".bytes        // prints null.
     string.bytes = function
         data = self
-        if data[:2] != "0b" and data.to_int isa number then data = data.to_bin
-        if data[:2] == "0b" then
-            binary_string = data[2:]
-            binary_string = binary_string.zfill(binary_string.len + (8 - binary_string.len % 8) % 8)
-            bytes = []
-            for i in range(0, len(binary_string)-1, 8)
-                bytes.push("0b" + binary_string[i:i+8])
-            end for
-            return bytes
+        array = []
+
+        while len(data) != 0
+        if data.lastIndexOf("0x") > data.lastIndexOf("0b") and data.lastIndexOf("0x") > data.lastIndexOf("0o") then
+            array.push(data[data.lastIndexOf("0x"):].to_bin[2:].zfill(8))
+            data = data[:data.lastIndexOf("0x")]
+        else if data.lastIndexOf("0b") > data.lastIndexOf("0x") and data.lastIndexOf("0b") > data.lastIndexOf("0o") then
+            array.push(data[data.lastIndexOf("0b"):][2:].zfill(8))
+            data = data[:data.lastIndexOf("0b")]
+        else if data.lastIndexOf("0o") > data.lastIndexOf("0x") and data.lastIndexOf("0o") > data.lastIndexOf("0b") then
+            array.push(data[data.lastIndexOf("0o"):].to_bin[2:].zfill(8))
+            data = data[:data.lastIndexOf("0o")]
+        else
+            logger.error("string.bytes", "FormatError: The input '" + self + "' is not in a recognized decimal, binary, hexadecimal, or octal format required for conversion to bytes.")
+            return null
         end if
-        logger.error("string.bytes", "FormatError: The input '" + self + "' is not in a recognized decimal, binary, hexadecimal, or octal format required for conversion to bytes.")
-        return null
+        end while
+        array.reverse
+        binary_string = array.join("")
+        binary_string = binary_string.zfill(binary_string.len + (8 - binary_string.len % 8) % 8)
+        bytes = []
+        for i in range(0, len(binary_string)-1, 8)
+            bytes.push("0b" + binary_string[i:i+8])
+        end for
+        return bytes
     end function
 
     // Encodes a single character to its UTF-8 representation.
@@ -1052,7 +1065,9 @@ __scope = function()
                     "E": "1110",
                     "F": "1111",}
         binary_str = ""
-        if self.startsWith("0o") then
+        if self.startsWith("0b") then
+            return self
+        else if self.startsWith("0o") then
             if self == "0o0" then return "0b0"
             for digit in self[2:]
                 binary_str = binary_str + binary_mapping[digit][1:]
