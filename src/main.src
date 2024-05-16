@@ -736,7 +736,7 @@ __scope = function()
     // @example print "0xFF".bytes          // prints ["0b11111111"]
     // @example print "123".bytes           // prints ["0b01111011"]
     // @example print "0b1010".bytes        // prints ["0b00001010"]
-    // @example print "€".encode_utf8.bytes // prints ["0b11100010", "0b10000010", "0b10101100"]
+    // @example print "€".encodeUtf8.bytes // prints ["0b11100010", "0b10000010", "0b10101100"]
     // @example print "Hello".bytes         // prints null.
     string.bytes = function
         data = self
@@ -760,24 +760,24 @@ __scope = function()
     // @description - The Unicode code point needs to be between 0 (`U+0000`) and 65535 (`U+FFFF`). Any number which is outside this range will cause the script to throw a runtime error.
     //
     // @description **Parameters:**
-    // @description None. The function operates on the Unicode character it is called on (`self`), which must represent a single code point between `U+0000` and `U+FFFF`.
+    // @description None. The function operates on the string it is called on (`self`), where each character must represent a single code point between `U+0000` and `U+FFFF`.
     //
     // @description **Returns:**
     // @return {string|null}
     // @description `string` The UTF-8 encoded hexadecimal representation of the Unicode code point. If the code point is outside the valid Unicode range, returns `null`.
     //
     // @example // For a character within U+0000 to U+007F: 
-    // @example print "$".encode_utf8   // prints "0x24"
+    // @example print "$".encodeUtf8   // prints "0x24"
     // @example
     // @example // For a character within U+0080 to U+07FF: 
-    // @example print "£".encode_utf8   // prints "0xC20xA3"
+    // @example print "£".encodeUtf8   // prints "0xC20xA3"
     // @example
     // @example // For a character within U+0800 to U+FFFF: 
-    // @example print "€".encode_utf8  // prints "0xE20x820xAC"
+    // @example print "€".encodeUtf8  // prints "0xE20x820xAC"
     // @example
     // @example // !!! Throws Runtime error in script !!!
     // @example // For a character within U+10000 to U+10FFFF:
-    // @example print "😀".encode_utf8 // prints "0xF00x9F0x980x80"
+    // @example print "😀".encodeUtf8 // prints "0xF00x9F0x980x80"
     string.encodeUtf8 = function
         encoded_bytes = []
         for data in self
@@ -1603,19 +1603,3 @@ __scope = function()
 end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
-
-for j in range(1,16)
-charset = ""
-
-min = 33
-max = 512
-
-for i in range(1,512)
-    charset = charset + char(floor(rnd * (max - min + 1) + min))
-end for
-
-encChar = charset.encodeUrl.encodeBase64
-decChar = encChar.decodeBase64.decodeUrl
-
-print(charset == decChar)
-end for
