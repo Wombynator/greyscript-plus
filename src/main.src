@@ -781,11 +781,7 @@ __scope = function()
     string.encodeUtf8 = function
         encoded_bytes = []
         for data in self
-            if (data[:2] == "0b" or data[:2] == "0x" or data[:2] == "0o" or data.to_int isa number) and not data == " " then
-                utf16_code_point = data.to_int
-            else 
-                utf16_code_point = code(data)
-            end if
+            utf16_code_point = code(data)
 
             if utf16_code_point <= "0x7F".to_int then
                 // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
@@ -804,7 +800,7 @@ __scope = function()
                 encoded_bytes.push(("0b11110" + utf16_code_point[:3]).to_hex + ("0b10" + utf16_code_point[3:9]).to_hex + ("0b10" + utf16_code_point[9:15]).to_hex + ("0b10" + utf16_code_point[15:]).to_hex)
             else
                 // Out of Unicode range
-                logger.error("string.encodeUtf8", "FormatError: The input '" + self + "' is out of range.")
+                logger.error("string.encodeUtf8", "FormatError: The input '" + data + "' (UTF-16: " + code(data) + ") is out of range.")
                 encoded_bytes.push("0x00")
             end if
         end for
@@ -981,11 +977,11 @@ __scope = function()
             binary_string = binary_string + base64_chars.indexOf(byte).to_bin[2:].zfill(6)
         end for
         decoded = ""
-        for i in range(0, len(binary_string)-1, 8)
+        for i in range(0, len(binary_string)-8, 8)
             byte_segment = ("0b" + binary_string[i:i+8]).to_int
             decoded = decoded + char(byte_segment)
         end for
-        return decoded.decodeUrl
+        return decoded
     end function
 
     // Converts the string representation of a number into its octal form.
@@ -1607,3 +1603,19 @@ __scope = function()
 end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
+
+for j in range(1,16)
+charset = ""
+
+min = 33
+max = 512
+
+for i in range(1,512)
+    charset = charset + char(floor(rnd * (max - min + 1) + min))
+end for
+
+encChar = charset.encodeUrl.encodeBase64
+decChar = encChar.decodeBase64.decodeUrl
+
+print(charset == decChar)
+end for
