@@ -1,4 +1,4 @@
-# Greyscript Plus Library for game [Greyhack](https://store.steampowered.com/app/605230/Grey_Hack/)
+# Greyscript Plus Library for game [Grey Hack](https://store.steampowered.com/app/605230/Grey_Hack/)
 
 Library to enhance the ingame language GreyScript ([documentation](https://documentation.greyscript.org/))
 
@@ -16,9 +16,16 @@ cd greyscript-plus
 ```
 
 ## Option 2: Download the ZIP
-1. Download the ZIP file from [here](https://github.com/Wombynator/greyscript-plus/archive/refs/heads/main.zip).
+1. Download the ZIP file from [this link](https://github.com/Wombynator/greyscript-plus/archive/refs/heads/main.zip).
 2. Extract the downloaded ZIP file.
 3. Navigate to the extracted directory.
+
+## Usage
+1. Import the library into your script using the relative path:
+```lua
+import_code("greyscript-plus/gsp.src")
+```
+2. You're now set up and ready to use the Greyscript Plus functions and tools in your project.
 
 # Table of Contents
 
