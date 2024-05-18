@@ -1,10 +1,24 @@
-# greyscript-plus
+# Greyscript Plus Library for game [Greyhack](https://store.steampowered.com/app/605230/Grey_Hack/)
 
-Library to enhance GreyScript
+Library to enhance the ingame language GreyScript ([documentation](https://documentation.greyscript.org/))
 
-# Overview
+# Installation
 
-This project provides a robust and comprehensive set of functions for various use cases, including cryptography, event handling, logging mechanisms and general-purpose utilities.
+## Option 1: Clone the Repository Using [Git](https://git-scm.com/downloads)
+1. Open your terminal.
+2. Clone the repository by running the following command:
+```sh
+git clone https://github.com/Wombynator/greyscript-plus.git
+```
+3. Navigate to the project directory:
+```sh
+cd greyscript-plus
+```
+
+## Option 2: Download the ZIP
+1. Download the ZIP file from [here](https://github.com/Wombynator/greyscript-plus/archive/refs/heads/main.zip).
+2. Extract the downloaded ZIP file.
+3. Navigate to the extracted directory.
 
 # Table of Contents
 

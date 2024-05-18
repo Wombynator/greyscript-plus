@@ -842,31 +842,31 @@ __scope = function()
         while i < len(utf8_bytes)
             byte = utf8_bytes[i:i+4].to_int
             
-            if (byte & "0b10000000".to_int) == 0 then  // 1-byte character
+            if bitAnd(byte,128) == 0 then  // 1-byte character
                 decoded_chars.push(char(byte))
-            else if (byte & "0b11100000".to_int) == "0b11000000".to_int then  // 2-byte character
-                byte_sequence = (byte & "0b00011111".to_int) << 6
+            else if bitAnd(byte,224) == 192 then  // 2-byte character
+                byte_sequence = bitAnd(byte,31) << 6
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
                 decoded_chars.push(char(byte_sequence))
-            else if (byte & "0b11110000".to_int) == "0b11100000".to_int then  // 3-byte character
-                byte_sequence = (byte & "0b00001111".to_int) << 12
+            else if bitAnd(byte,240) == 224 then  // 3-byte character
+                byte_sequence = bitAnd(byte,15) << 12
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 6
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 6
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
                 decoded_chars.push(char(byte_sequence))
-            else if (byte & "0b11111000".to_int) == "0b11110000".to_int then  // 4-byte character
-                logger.error("string.decodeUtf8", "FormatError: The bytes '" + utf8_bytes[i:i+4*4] + "' from input '" + self + "' are a 4-byte character and are currently not supported in greyscript.") // !!! Throws Runtime error in script !!!
+            else if bitAnd(byte,248) == 240 then  // 4-byte character
+                logger.error("string.decodeUtf8", "FormatError: The bytes '" + utf8_bytes[i:i+4*4] + "' from input '" + self + "' are a 4-byte character and are currently not supported by Greyscript.") // !!! Throws Runtime error in script !!!
                 i = i + 4*4
                 continue
-                byte_sequence = (byte & "0b00000111".to_int) << 18
+                byte_sequence = bitAnd(byte,7) << 18
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 12
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 12
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int) << 6
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 6
                 i = i + 4
-                byte_sequence = byte_sequence | (utf8_bytes[i:i+4].to_int & "0b00111111".to_int)
+                byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
                 decoded_chars.push(char(byte_sequence))
             else
                 logger.error("string.decodeUtf8", "FormatError: The byte '" + utf8_bytes[i:i+4] + "' from input '" + self + "' is out of range.")
@@ -1102,7 +1102,7 @@ __scope = function()
         hex_digits = "0123456789ABCDEF"
         hex_result = ""
         if self.startsWith("0b") then
-            if self == "0b0" then return "0x0"
+            if is_match(self, "^0b0+$") then return "0x0"
             binary_str = self[2:]
             binary_str = binary_str.zfill(binary_str.len + (4 - binary_str.len % 4) % 4)
             for i in range(0, binary_str.len - 1, 4)
@@ -1112,7 +1112,7 @@ __scope = function()
             end for
             return "0x" + hex_result.lstrip("0")
         else if self.startsWith("0o") then
-            if self == "0o0" then return "0x0"
+            if is_match(self, "^0o0+$") then return "0x0"
             return self.to_bin.to_hex
         else
             return self.to_int.to_hex
@@ -1184,8 +1184,10 @@ __scope = function()
     // @example print "12345".zfill(3) // prints "12345" (no change, as the string is already of equal or greater length)
     string.zfill = function(width)
         s = self
+        if s.startsWith("0b") then s = s[2:]
         zeros_needed = width - s.len
         if zeros_needed > 0 then s = "0" * zeros_needed + s
+        if self.startsWith("0b") then return "0b" +s
         return s
     end function
 
@@ -1426,7 +1428,7 @@ __scope = function()
     // @example print "World".startsWith("World!") // prints false, logs warning that "World!" is longer than "World"
     string.startsWith = function(value)
         if value.len > self.len then
-            logger.warn("LengthWarning: Provided prefix '" + value + "' (length: " + str(value.len) + ") exceeds the length of the string '" + self + "' (length: " + str(self.len) + ").")
+            logger.warn("string.startsWith", "LengthWarning: Provided prefix '" + value + "' (length: " + str(value.len) + ") exceeds the length of the string '" + self + "' (length: " + str(self.len) + ").")
             return false
         else if self[:value.len] == value then
             return true
@@ -1548,6 +1550,117 @@ __scope = function()
     //   sell_coin
     //   show_nodes
 
+    globals.compressLZ77 = function(text)
+        i = 0
+        n = text.len
+        window_size = 4095
+        buffer_size = 15
+        table = []
+
+        while i < n
+            match_length = 0
+            match_distance = 0
+            if i != 0 then
+                for j in range(max(0, i - window_size), i - 1)
+                    k = 0
+                    while k < buffer_size and i + k < n and text[j + k] == text[i + k] and k < (i - j)
+                        k = k + 1
+                    end while
+                    if k > match_length then
+                        match_length = k
+                        match_distance = i - j
+                    end if
+                end for
+            end if
+            
+            if match_length > 0 then
+                if i + match_length < n then
+                    next_char = text[i + match_length]
+                else
+                    next_char = ""
+                end if
+                table.push([match_distance, match_length, next_char])
+                i = i + match_length + 1
+            else
+                table.push([0, 0, text[i]])
+                i = i + 1
+            end if
+        end while
+        result = []
+        for tuple in table
+            result.push(char(tuple[0].to_bin.zfill(12)[:10].to_int) + char(("0b" + tuple[0].to_bin.zfill(12)[10:] + tuple[1].to_bin.zfill(4)[2:]).to_int))
+            result.push(tuple[2])
+        end for
+        return result.join("")
+    end function
+
+    globals.decompressLZ77 = function(text)
+        i = 0
+        result = ""
+        bytes = "0b"
+        for j in range(0, text.len, 3)
+            if text.len - j == 2 then
+                bytes = bytes + text[j].code.to_bin[2:].zfill(8) + text[j + 1].code.to_bin[2:].zfill(8)
+            else if text.len - j == 0 then
+            else
+                bytes = bytes + text[j].code.to_bin[2:].zfill(8) + text[j + 1].code.to_bin[2:].zfill(8)
+                for byte in text[j+2].encodeUtf8.bytes
+                    bytes = bytes + byte[2:]
+                end for
+            end if
+        end for
+        bytes = bytes.bytes
+        table = []
+
+        while bytes.len > 0
+            distance = (bytes[0] + bytes[1][2:-4]).to_int
+            length = ("0b" + bytes[1][-4:]).to_int
+            bytes = bytes[2:]
+            if bytes.len == 0 then
+                character = ""
+            else if bytes[0].startsWith("0b0") then // 1-byte character
+                character = char(bytes.pull.to_int)
+            else if bytes[0].startsWith("0b110") then // 2-byte character
+                character = (bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+            else if bytes[0].startsWith("0b1110") then // 3-byte character
+                character = (bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+            else if bytes[0].startsWith("0b11110") then // 4-byte character
+                logger.error("decompressLZ77", "FormatError: The input bytes '" + [bytes.pull,bytes.pull,bytes.pull,bytes.pull].join(" ") + "' (UTF-8: " + [bytes.pull.to_hex,bytes.pull.to_hex,bytes.pull.to_hex,bytes.pull.to_hex].join("") + ") is currently not supported by Greyscript.")
+                //character = (bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+                character = ""
+            else
+                logger.error("decompressLZ77", "FormatError: The input byte '" + bytes.pull + "' is out of range.")
+                character = ""
+            end if
+            table.push([distance,length,character])
+        end while
+        for tuple in table
+            if tuple[1] == 0 then
+                result = result + tuple[2]
+            else
+                distance = tuple[0]
+                length = tuple[1]
+                if distance != length then
+                    result = result + result[-1 * distance: -1 * distance + length] + tuple[2]
+                else
+                    result = result + result[-1 * distance:] + tuple[2]
+                end if
+            end if
+        end for
+
+        return result
+    end function
+
+    globals.max = function(a,b)
+        if a > b then return a
+        return b
+    end function
+
+    globals.min = function(a,b)
+        if a < b then return a
+        return b
+    end function
+
     // Determines the execution context of the script.
     // @description **Description:**
     // @description - This function checks if the script is being run as the main program or as an imported module.
@@ -1618,3 +1731,24 @@ __scope = function()
 end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
+
+//clear_screen
+
+min = 33
+max = 64
+text = ""
+for i in range(64)
+    text = text + char(floor(rnd * max))
+end for
+
+string.encodeUtf16 = function
+    text = self
+    result = ""
+    for character in text
+        result = result + character.code.to_hex
+    end for
+    return result
+end function
+
+print range(max(0, 1 - 4095), 1)
+print compressLZ77("ababa")
