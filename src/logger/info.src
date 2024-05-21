@@ -1,0 +1,23 @@
+// Logs an informational message.
+// @description **Description:**
+// @description - Logs an informational message if the logger's state is set to `debug` or `trace`. It formats the message with a timestamp, labels it as "Info", includes the source of the log in uppercase, and displays the message. The log message is colored and also appended to a log file, with tags removed for the file content.
+//
+// @description **Parameters:**
+// @param {string} source
+// @description `source: string` The source module or component that generated the log message.
+// @param {string} message
+// @description `message: string` The informational message to log.
+//
+// @description **Returns:**
+// @return {null}
+// @description Does not return a value.
+//
+// @example logger.info("main", "Info message...")
+// @example "[5.6742] Info: [MAIN] Info message..." // colors not included in this example
+logger.info = function(source, message)
+    if logger.state != "normal" then
+        logMsg = ("[" + time + "]").color("alien") + " " + "Info:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("alien")
+        print logMsg
+        //logger.file.append(logMsg.removeTags)
+    end if
+end function

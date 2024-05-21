@@ -1,0 +1,21 @@
+// Logs an error message.
+// @description **Description:**
+// @description - Logs an error message, regardless of the logger's state. It formats the message with a timestamp, labels it as "Error", includes the source of the log in uppercase, and displays the message. The log message is colored and also appended to a log file, with tags removed for the file content.
+//
+// @description **Parameters:**
+// @param {string} source
+// @description `source: string` The source module or component that generated the log message.
+// @param {string} message
+// @description `message: string` The error message to log.
+//
+// @description **Returns:**
+// @return {null}
+// @description Does not return a value.
+//
+// @example logger.error("main", "Error message...")
+// @example "[5.6742] Error: [MAIN] Error message..." // colors not included in this example
+logger.error = function(source, message)
+    logMsg = ("[" + time + "]").color("alien") + " " + "Error:".color("deep sky blue") + " " + ("[" + source.upper + "]").color("silver") + " " + message.color("tomato")
+    print logMsg
+    //logger.file.append(logMsg.removeTags)
+end function

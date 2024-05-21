@@ -1,0 +1,32 @@
+// Fills the string with leading zeros to reach a specified width.
+// @description **Description:**
+// @description - This function prepends zeros to the beginning of the string until the total length of the string reaches the specified `width`. If the length of the string (`self`) is already equal to or greater than `width`, no zeros are added.
+//
+// @description **Parameters:**
+// @param {number} width
+// @description `width: number` The desired total length of the string after prepending zeros.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The modified string with leading zeros added if necessary to reach the specified `width`.
+//
+// @example print "42".zfill(5)    // prints "00042"
+// @example print "12345".zfill(3) // prints "12345" (no change, as the string is already of equal or greater length)
+// @example print "0b1".zfill(4)   // prints "0b0001"
+// @example print "0xF".zfill(4)   // prints "0x000F"
+// @example print "0o7".zfill(4)   // prints "0o0007"
+string.zfill = function(width)
+    s = self
+    if self.startsWith("0b") or self.startsWith("0x") or self.startsWith("0o") then s = s[2:]
+    zeros_needed = width - s.len
+    if zeros_needed > 0 then s = "0" * zeros_needed + s
+    if self.startsWith("0b") then
+        return "0b" + s
+    else if self.startsWith("0x") then
+        return "0x" + s
+    else if self.startsWith("0o") then
+        return "0o" + s
+    else
+        return s
+    end if
+end function

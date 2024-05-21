@@ -1,0 +1,4 @@
+globals.max = function(a,b)
+    if a > b then return a
+    return b
+end function

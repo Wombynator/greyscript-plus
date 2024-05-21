@@ -1,0 +1,8 @@
+globals.logger = {}
+
+import_code("info.src")
+import_code("debug.src")
+import_code("trace.src")
+import_code("warn.src")
+import_code("error.src")
+import_code("fatal.src")

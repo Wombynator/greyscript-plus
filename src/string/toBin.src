@@ -1,0 +1,51 @@
+// Converts the string representation of a number into its binary form.
+// @description **Description:**
+// @description - Converts octal (`0o` prefix), hexadecimal (`0x` prefix), or decimal (no prefix) representations of numbers into binary form.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The binary representation of the number, prefixed with `0b`.
+//
+// @example print "0o123".toBin // prints "0b1010011" (octal to binary conversion)
+// @example print "0x1A".toBin  // prints "0b11010" (hexadecimal to binary conversion)
+// @example print "10".toBin    // prints "0b1010" (decimal to binary conversion)
+string.toBin = function
+    binary_mapping = {
+                "0": "0000",
+                "1": "0001",
+                "2": "0010",
+                "3": "0011",
+                "4": "0100",
+                "5": "0101",
+                "6": "0110",
+                "7": "0111",
+                "8": "1000",
+                "9": "1001",
+                "A": "1010",
+                "B": "1011",
+                "C": "1100",
+                "D": "1101",
+                "E": "1110",
+                "F": "1111",}
+    binary_str = ""
+    if self.startsWith("0b") then
+        return self
+    else if self.startsWith("0o") then
+        if self == "0o0" then return "0b0"
+        for digit in self[2:]
+            binary_str = binary_str + binary_mapping[digit][1:]
+        end for
+        return "0b" + binary_str.lstrip("0")
+    else if self.startsWith("0x") then
+        if self == "0x0" then return "0b0"
+        for digit in self[2:]
+            binary_str = binary_str + binary_mapping[digit.upper]
+        end for
+        return "0b" + binary_str.lstrip("0")
+    else
+        return self.toInt.toBin
+    end if
+end function

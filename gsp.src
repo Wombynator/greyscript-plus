@@ -1,0 +1,18 @@
+import_code("src/general/compressLZ77.src")
+import_code("src/general/max.src")
+import_code("src/general/min.src")
+
+import_code("src/logger/_logger.src") // Logging module
+
+import_code("src/number/toBin.src")
+import_code("src/number/toHex.src")
+import_code("src/number/toOct.src")
+
+import_code("src/string/compressLZ77.src")
+import_code("src/string/encodeUtf8.src")
+import_code("src/string/startsWith.src")
+import_code("src/string/toBin.src")
+import_code("src/string/toHex.src")
+import_code("src/string/toInt.src")
+import_code("src/string/toOct.src")
+import_code("src/string/zfill.src")

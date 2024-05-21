@@ -1,0 +1,23 @@
+// Converts a number into its hexadecimal form.
+// @description **Description:**
+// @description - Converts the number it is called on into hexadecimal form.
+//
+// @description **Parameters:**
+// @description None. The function operates on the number object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The hexadecimal representation of the number, prefixed with `0b`.
+//
+// @example print 123.toHex // prints "0x7B" (decimal to hexadecimal conversion)
+number.toHex = function
+    hex_digits = "0123456789ABCDEF"
+    hex_result = ""
+    if self == 0 then return "0x0"
+    while dec > 0
+        remainder = self % 16
+        hex_result = hex_digits[remainder] + hex_result
+        dec = floor(self / 16)
+    end while
+    return "0x" + hex_result.lstrip("0")
+end function

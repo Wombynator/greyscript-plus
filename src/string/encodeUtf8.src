@@ -1,0 +1,52 @@
+// Encodes a single character to its UTF-8 representation.
+// @description **Description:**
+// @description - Converts a Unicode code point from UTF-16 to its UTF-8 equivalent. The conversion process depends on the range of the code point.
+// @description - The Unicode code point needs to be between 0 (`U+0000`) and 65535 (`U+FFFF`). Any number which is outside this range will cause the script to throw a runtime error.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string it is called on (`self`), where each character must represent a single code point between `U+0000` and `U+FFFF`.
+//
+// @description **Returns:**
+// @return {string|null}
+// @description `string` The UTF-8 encoded hexadecimal representation of the Unicode code point. If the code point is outside the valid Unicode range, returns `null`.
+//
+// @example // For a character within U+0000 to U+007F: 
+// @example print "$".encodeUtf8   // prints "0x24"
+// @example
+// @example // For a character within U+0080 to U+07FF: 
+// @example print "£".encodeUtf8   // prints "0xC20xA3"
+// @example
+// @example // For a character within U+0800 to U+FFFF: 
+// @example print "€".encodeUtf8  // prints "0xE20x820xAC"
+// @example
+// @example // !!! Throws Runtime error in script !!!
+// @example // For a character within U+10000 to U+10FFFF:
+// @example print "😀".encodeUtf8 // prints "0xF00x9F0x980x80"
+string.encodeUtf8 = function
+    encoded_bytes = []
+    for data in self
+        utf16_code_point = code(data)
+
+        if utf16_code_point <= "0x7F".to_int then
+            // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
+            encoded_bytes.push(utf16_code_point.toHex)
+        else if utf16_code_point <= "0x7FF".to_int then
+            // For U+0080 to U+07FF, UTF-8 uses two bytes: 110xxxxx 10xxxxxx
+            utf16_code_point = utf16_code_point.to_bin[2:].zfill(11)
+            encoded_bytes.push(("0b110" + utf16_code_point[:5]).toHex + ("0b10" + utf16_code_point[5:]).toHex)
+        else if utf16_code_point <= "0xFFFF".to_int then
+            // For U+0800 to U+FFFF, UTF-8 uses three bytes: 1110xxxx 10xxxxxx 10xxxxxx
+            utf16_code_point = utf16_code_point.to_bin[2:].zfill(16)
+            encoded_bytes.push(("0b1110" + utf16_code_point[:4]).toHex + ("0b10" + utf16_code_point[4:10]).toHex + ("0b10" + utf16_code_point[10:]).toHex)
+        else if utf16_code_point <= "0x10FFFF".to_int then // !!! Throws Runtime error in script !!!
+            // For U+10000 to U+10FFFF, UTF-8 uses four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+            utf16_code_point = utf16_code_point.to_bin[2:].zfill(21)
+            encoded_bytes.push(("0b11110" + utf16_code_point[:3]).toHex + ("0b10" + utf16_code_point[3:9]).toHex + ("0b10" + utf16_code_point[9:15]).toHex + ("0b10" + utf16_code_point[15:]).toHex)
+        else
+            // Out of Unicode range
+            logger.error("string.encodeUtf8", "FormatError: The input '" + data + "' (UTF-16: " + code(data) + ") is out of range.")
+            encoded_bytes.push("0x00")
+        end if
+    end for
+    return encoded_bytes.join("")
+end function

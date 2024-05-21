@@ -1409,33 +1409,33 @@ __scope = function()
         return s
     end function
 
-    // Checks if a string starts with the specified substring.
-    // @description **Description:**
-    // @description - This function compares the beginning of the string with the provided `value` to determine if it starts with it.
-    // @description - If `value` is longer than `self`, logs a warning indicating the mismatch in length and returns `false`.
-    // @description - Returns `true` if the string starts with `value`, otherwise returns `false`.
-    //
-    // @description **Parameters:**
-    // @param {string} value
-    // @description `value: string` The substring to compare against the start of the string.
-    //
-    // @description **Returns:**
-    // @return {number}
-    // @description `number` Returns `true` if the string starts with the specified value, otherwise `false`.
-    //
-    // @example print "Hello".startsWith("He")     // prints true
-    // @example print "Goodbye".startsWith("bye")  // prints false
-    // @example print "World".startsWith("World!") // prints false, logs warning that "World!" is longer than "World"
-    string.startsWith = function(value)
-        if value.len > self.len then
-            logger.warn("string.startsWith", "LengthWarning: Provided prefix '" + value + "' (length: " + str(value.len) + ") exceeds the length of the string '" + self + "' (length: " + str(self.len) + ").")
-            return false
-        else if self[:value.len] == value then
-            return true
-        else
-            return false
-        end if
-    end function
+// Checks if a string starts with the specified substring.
+// @description **Description:**
+// @description - This function compares the beginning of the string with the provided `value` to determine if it starts with it.
+// @description - If `value` is longer than `self`, logs a warning indicating the mismatch in length and returns `false`.
+// @description - Returns `true` if the string starts with `value`, otherwise returns `false`.
+//
+// @description **Parameters:**
+// @param {string} value
+// @description `value: string` The substring to compare against the start of the string.
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the string starts with the specified value, otherwise `false`.
+//
+// @example print "Hello".startsWith("He")     // prints true
+// @example print "Goodbye".startsWith("bye")  // prints false
+// @example print "World".startsWith("World!") // prints false, logs warning that "World!" is longer than "World"
+string.startsWith = function(value)
+    if value.len > self.len then
+        logger.warn("string.startsWith", "LengthWarning: Provided prefix '" + value + "' (length: " + str(value.len) + ") exceeds the length of the string '" + self + "' (length: " + str(self.len) + ").")
+        return false
+    else if self[:value.len] == value then
+        return true
+    else
+        return false
+    end if
+end function
 
     // Checks if a string ends with the specified substring.
     // @description **Description:**
