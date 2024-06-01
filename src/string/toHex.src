@@ -21,7 +21,7 @@ string.toHex = function
         binary_str = binary_str.zfill(binary_str.len + (4 - binary_str.len % 4) % 4)
         for i in range(0, binary_str.len - 1, 4)
             four_bits = binary_str[i:i+4]
-            decimal_val = ("0b" + four_bits).to_int
+            decimal_val = ("0b" + four_bits).toInt
             hex_result = hex_result + hex_digits[decimal_val]
         end for
         return "0x" + hex_result.lstrip("0")

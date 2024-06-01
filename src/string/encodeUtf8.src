@@ -27,20 +27,20 @@ string.encodeUtf8 = function
     for data in self
         utf16_code_point = code(data)
 
-        if utf16_code_point <= "0x7F".to_int then
+        if utf16_code_point <= "0x7F".toInt then
             // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
             encoded_bytes.push(utf16_code_point.toHex)
-        else if utf16_code_point <= "0x7FF".to_int then
+        else if utf16_code_point <= "0x7FF".toInt then
             // For U+0080 to U+07FF, UTF-8 uses two bytes: 110xxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(11)
+            utf16_code_point = utf16_code_point.toBin[2:].zfill(11)
             encoded_bytes.push(("0b110" + utf16_code_point[:5]).toHex + ("0b10" + utf16_code_point[5:]).toHex)
-        else if utf16_code_point <= "0xFFFF".to_int then
+        else if utf16_code_point <= "0xFFFF".toInt then
             // For U+0800 to U+FFFF, UTF-8 uses three bytes: 1110xxxx 10xxxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(16)
+            utf16_code_point = utf16_code_point.toBin[2:].zfill(16)
             encoded_bytes.push(("0b1110" + utf16_code_point[:4]).toHex + ("0b10" + utf16_code_point[4:10]).toHex + ("0b10" + utf16_code_point[10:]).toHex)
-        else if utf16_code_point <= "0x10FFFF".to_int then // !!! Throws Runtime error in script !!!
+        else if utf16_code_point <= "0x10FFFF".toInt then // !!! Throws Runtime error in script !!!
             // For U+10000 to U+10FFFF, UTF-8 uses four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-            utf16_code_point = utf16_code_point.to_bin[2:].zfill(21)
+            utf16_code_point = utf16_code_point.toBin[2:].zfill(21)
             encoded_bytes.push(("0b11110" + utf16_code_point[:3]).toHex + ("0b10" + utf16_code_point[3:9]).toHex + ("0b10" + utf16_code_point[9:15]).toHex + ("0b10" + utf16_code_point[15:]).toHex)
         else
             // Out of Unicode range

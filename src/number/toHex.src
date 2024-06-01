@@ -14,10 +14,11 @@ number.toHex = function
     hex_digits = "0123456789ABCDEF"
     hex_result = ""
     if self == 0 then return "0x0"
+    dec = self
     while dec > 0
-        remainder = self % 16
+        remainder = dec % 16
         hex_result = hex_digits[remainder] + hex_result
-        dec = floor(self / 16)
+        dec = floor(dec / 16)
     end while
     return "0x" + hex_result.lstrip("0")
 end function

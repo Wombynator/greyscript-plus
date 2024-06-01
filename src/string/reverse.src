@@ -1,0 +1,18 @@
+// Reverses the order of characters in a string.
+// @description **Description:**
+// @description - This function reverses the order of characters of the string.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The original string with its characters in reverse order.
+//
+// @example print "Hello".reverse // prints "olleH"
+// @example print "12345".reverse // prints "54321"
+string.reverse = function
+    s = self.values
+    s.reverse
+    return s.join("")
+end function

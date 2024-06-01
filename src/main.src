@@ -610,8 +610,8 @@ __scope = function()
     // @return {string}
     // @description `string` The octal representation of the number, prefixed with `0x`.
     //
-    // @example print 123.to_oct // prints "0o173" (decimal to octal conversion)
-    number.to_oct = function
+    // @example print 123.toOct // prints "0o173" (decimal to octal conversion)
+    number.toOct = function
         oct_digits = "01234567"
         oct_result = ""
         dec = self
@@ -635,8 +635,8 @@ __scope = function()
     // @return {string}
     // @description `string` The binary representation of the number, prefixed with `0b`.
     //
-    // @example print 123.to_bin // prints "0b1111011" (decimal to binary conversion)
-    number.to_bin = function
+    // @example print 123.toBin // prints "0b1111011" (decimal to binary conversion)
+    number.toBin = function
         binary_str = ""
         dec = self
         if dec == 0 then return "0b0"
@@ -658,8 +658,8 @@ __scope = function()
     // @return {string}
     // @description `string` The hexadecimal representation of the number, prefixed with `0b`.
     //
-    // @example print 123.to_hex // prints "0x7B" (decimal to hexadecimal conversion)
-    number.to_hex = function
+    // @example print 123.toHex // prints "0x7B" (decimal to hexadecimal conversion)
+    number.toHex = function
         hex_digits = "0123456789ABCDEF"
         hex_result = ""
         dec = self
@@ -744,13 +744,13 @@ __scope = function()
 
         while len(data) != 0
         if data.lastIndexOf("0x") > data.lastIndexOf("0b") and data.lastIndexOf("0x") > data.lastIndexOf("0o") then
-            array.push(data[data.lastIndexOf("0x"):].to_bin[2:].zfill(8))
+            array.push(data[data.lastIndexOf("0x"):].toBin[2:].zfill(8))
             data = data[:data.lastIndexOf("0x")]
         else if data.lastIndexOf("0b") > data.lastIndexOf("0x") and data.lastIndexOf("0b") > data.lastIndexOf("0o") then
             array.push(data[data.lastIndexOf("0b"):][2:].zfill(8))
             data = data[:data.lastIndexOf("0b")]
         else if data.lastIndexOf("0o") > data.lastIndexOf("0x") and data.lastIndexOf("0o") > data.lastIndexOf("0b") then
-            array.push(data[data.lastIndexOf("0o"):].to_bin[2:].zfill(8))
+            array.push(data[data.lastIndexOf("0o"):].toBin[2:].zfill(8))
             data = data[:data.lastIndexOf("0o")]
         else
             logger.error("string.bytes", "FormatError: The input '" + self + "' is not in a recognized decimal, binary, hexadecimal, or octal format required for conversion to bytes.")
@@ -798,19 +798,19 @@ __scope = function()
 
             if utf16_code_point <= "0x7F".to_int then
                 // For U+0000 to U+007F, UTF-8 uses the same value (1 byte)
-                encoded_bytes.push(utf16_code_point.to_hex)
+                encoded_bytes.push(utf16_code_point.toHex)
             else if utf16_code_point <= "0x7FF".to_int then
                 // For U+0080 to U+07FF, UTF-8 uses two bytes: 110xxxxx 10xxxxxx
-                utf16_code_point = utf16_code_point.to_bin[2:].zfill(11)
-                encoded_bytes.push(("0b110" + utf16_code_point[:5]).to_hex + ("0b10" + utf16_code_point[5:]).to_hex)
+                utf16_code_point = utf16_code_point.toBin[2:].zfill(11)
+                encoded_bytes.push(("0b110" + utf16_code_point[:5]).toHex + ("0b10" + utf16_code_point[5:]).toHex)
             else if utf16_code_point <= "0xFFFF".to_int then
                 // For U+0800 to U+FFFF, UTF-8 uses three bytes: 1110xxxx 10xxxxxx 10xxxxxx
-                utf16_code_point = utf16_code_point.to_bin[2:].zfill(16)
-                encoded_bytes.push(("0b1110" + utf16_code_point[:4]).to_hex + ("0b10" + utf16_code_point[4:10]).to_hex + ("0b10" + utf16_code_point[10:]).to_hex)
+                utf16_code_point = utf16_code_point.toBin[2:].zfill(16)
+                encoded_bytes.push(("0b1110" + utf16_code_point[:4]).toHex + ("0b10" + utf16_code_point[4:10]).toHex + ("0b10" + utf16_code_point[10:]).toHex)
             else if utf16_code_point <= "0x10FFFF".to_int then // !!! Throws Runtime error in script !!!
                 // For U+10000 to U+10FFFF, UTF-8 uses four bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-                utf16_code_point = utf16_code_point.to_bin[2:].zfill(21)
-                encoded_bytes.push(("0b11110" + utf16_code_point[:3]).to_hex + ("0b10" + utf16_code_point[3:9]).to_hex + ("0b10" + utf16_code_point[9:15]).to_hex + ("0b10" + utf16_code_point[15:]).to_hex)
+                utf16_code_point = utf16_code_point.toBin[2:].zfill(21)
+                encoded_bytes.push(("0b11110" + utf16_code_point[:3]).toHex + ("0b10" + utf16_code_point[3:9]).toHex + ("0b10" + utf16_code_point[9:15]).toHex + ("0b10" + utf16_code_point[15:]).toHex)
             else
                 // Out of Unicode range
                 logger.error("string.encodeUtf8", "FormatError: The input '" + data + "' (UTF-16: " + code(data) + ") is out of range.")
@@ -967,7 +967,7 @@ __scope = function()
         binary_string = ""
 		data = self
         for byte in data
-            binary_string = binary_string + code(byte).to_bin[2:].zfill(8)
+            binary_string = binary_string + code(byte).toBin[2:].zfill(8)
         end for
         binary_string = binary_string.reverse.zfill(binary_string.len + (6 - binary_string.len % 6) % 6).reverse
         encoded = ""
@@ -987,7 +987,7 @@ __scope = function()
         data = self
         data = data.rstrip("=")
         for byte in data
-            binary_string = binary_string + base64_chars.indexOf(byte).to_bin[2:].zfill(6)
+            binary_string = binary_string + base64_chars.indexOf(byte).toBin[2:].zfill(6)
         end for
         decoded = ""
         for i in range(0, len(binary_string)-8, 8)
@@ -1008,10 +1008,10 @@ __scope = function()
     // @return {string}
     // @description `string` The octal representation of the number, prefixed with `0x`.
     //
-    // @example print "0b1010".to_oct // prints "0o12" (binary to octal conversion)
-    // @example print "0x123".to_oct  // prints "0o443" (hexadecimal to octal conversion)
-    // @example print "123".to_oct    // prints "0o173" (decimal to octal conversion)
-    string.to_oct = function
+    // @example print "0b1010".toOct // prints "0o12" (binary to octal conversion)
+    // @example print "0x123".toOct  // prints "0o443" (hexadecimal to octal conversion)
+    // @example print "123".toOct    // prints "0o173" (decimal to octal conversion)
+    string.toOct = function
         oct_digits = "01234567"
         oct_result = ""
         if self.startsWith("0b") then
@@ -1026,9 +1026,9 @@ __scope = function()
             return "0o" + oct_result.lstrip("0")
         else if self.startsWith("0x") then
             if self == "0x0" then return "0o0"
-            return self.to_bin.to_oct
+            return self.toBin.toOct
         else
-            return self.to_int.to_oct
+            return self.to_int.toOct
         end if
     end function
 
@@ -1043,10 +1043,10 @@ __scope = function()
     // @return {string}
     // @description `string` The binary representation of the number, prefixed with `0b`.
     //
-    // @example print "0o123".to_bin // prints "0b1010011" (octal to binary conversion)
-    // @example print "0x1A".to_bin  // prints "0b11010" (hexadecimal to binary conversion)
-    // @example print "10".to_bin    // prints "0b1010" (decimal to binary conversion)
-    string.to_bin = function
+    // @example print "0o123".toBin // prints "0b1010011" (octal to binary conversion)
+    // @example print "0x1A".toBin  // prints "0b11010" (hexadecimal to binary conversion)
+    // @example print "10".toBin    // prints "0b1010" (decimal to binary conversion)
+    string.toBin = function
         binary_mapping = {
                     "0": "0000",
                     "1": "0001",
@@ -1080,7 +1080,7 @@ __scope = function()
             end for
             return "0b" + binary_str.lstrip("0")
         else
-            return self.to_int.to_bin
+            return self.to_int.toBin
         end if
     end function
 
@@ -1095,10 +1095,10 @@ __scope = function()
     // @return {string}
     // @description `string` The hexadecimal representation of the number, prefixed with `0x`.
     //
-    // @example print "0b1010".to_hex // prints "0xA" (binary to hexadecimal conversion)
-    // @example print "0o123".to_hex  // prints "0x53" (octal to hexadecimal conversion)
-    // @example print "123".to_hex    // prints "0x7B" (decimal to hexadecimal conversion)
-    string.to_hex = function
+    // @example print "0b1010".toHex // prints "0xA" (binary to hexadecimal conversion)
+    // @example print "0o123".toHex  // prints "0x53" (octal to hexadecimal conversion)
+    // @example print "123".toHex    // prints "0x7B" (decimal to hexadecimal conversion)
+    string.toHex = function
         hex_digits = "0123456789ABCDEF"
         hex_result = ""
         if self.startsWith("0b") then
@@ -1113,9 +1113,9 @@ __scope = function()
             return "0x" + hex_result.lstrip("0")
         else if self.startsWith("0o") then
             if is_match(self, "^0o0+$") then return "0x0"
-            return self.to_bin.to_hex
+            return self.toBin.toHex
         else
-            return self.to_int.to_hex
+            return self.to_int.toHex
         end if
     end function
 
@@ -1130,11 +1130,11 @@ __scope = function()
     // @return {integer}
     // @description `integer` The integer value of the number represented by the string.
     //
-    // @example print "0b1010".to_int // prints 10 (binary to decimal conversion)
-    // @example print "0o123".to_int  // prints 83 (octal to decimal conversion)
-    // @example print "0x1A".to_int   // prints 26 (hexadecimal to decimal conversion)
-    // @example print "123".to_int    // prints 123 (direct conversion)
-    string.to_int = function
+    // @example print "0b1010".toInt // prints 10 (binary to decimal conversion)
+    // @example print "0o123".toInt  // prints 83 (octal to decimal conversion)
+    // @example print "0x1A".toInt   // prints 26 (hexadecimal to decimal conversion)
+    // @example print "123".toInt    // prints 123 (direct conversion)
+    string.toInt = function
         decimal = 0
         if self.startsWith("0b") then
             for i in range(self[2:].len - 1)
@@ -1588,7 +1588,7 @@ end function
         end while
         result = []
         for tuple in table
-            result.push(char(tuple[0].to_bin.zfill(12)[:10].to_int) + char(("0b" + tuple[0].to_bin.zfill(12)[10:] + tuple[1].to_bin.zfill(4)[2:]).to_int))
+            result.push(char(tuple[0].toBin.zfill(12)[:10].to_int) + char(("0b" + tuple[0].toBin.zfill(12)[10:] + tuple[1].toBin.zfill(4)[2:]).to_int))
             result.push(tuple[2])
         end for
         return result.join("")
@@ -1600,10 +1600,10 @@ end function
         bytes = "0b"
         for j in range(0, text.len, 3)
             if text.len - j == 2 then
-                bytes = bytes + text[j].code.to_bin[2:].zfill(8) + text[j + 1].code.to_bin[2:].zfill(8)
+                bytes = bytes + text[j].code.toBin[2:].zfill(8) + text[j + 1].code.toBin[2:].zfill(8)
             else if text.len - j == 0 then
             else
-                bytes = bytes + text[j].code.to_bin[2:].zfill(8) + text[j + 1].code.to_bin[2:].zfill(8)
+                bytes = bytes + text[j].code.toBin[2:].zfill(8) + text[j + 1].code.toBin[2:].zfill(8)
                 for byte in text[j+2].encodeUtf8.bytes
                     bytes = bytes + byte[2:]
                 end for
@@ -1621,12 +1621,12 @@ end function
             else if bytes[0].startsWith("0b0") then // 1-byte character
                 character = char(bytes.pull.to_int)
             else if bytes[0].startsWith("0b110") then // 2-byte character
-                character = (bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+                character = (bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
             else if bytes[0].startsWith("0b1110") then // 3-byte character
-                character = (bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+                character = (bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
             else if bytes[0].startsWith("0b11110") then // 4-byte character
-                logger.error("decompressLZ77", "FormatError: The input bytes '" + [bytes.pull,bytes.pull,bytes.pull,bytes.pull].join(" ") + "' (UTF-8: " + [bytes.pull.to_hex,bytes.pull.to_hex,bytes.pull.to_hex,bytes.pull.to_hex].join("") + ") is currently not supported by Greyscript.")
-                //character = (bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex + bytes.pull.to_hex).decodeUtf8
+                logger.error("decompressLZ77", "FormatError: The input bytes '" + [bytes.pull,bytes.pull,bytes.pull,bytes.pull].join(" ") + "' (UTF-8: " + [bytes.pull.toHex,bytes.pull.toHex,bytes.pull.toHex,bytes.pull.toHex].join("") + ") is currently not supported by Greyscript.")
+                //character = (bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
                 character = ""
             else
                 logger.error("decompressLZ77", "FormatError: The input byte '" + bytes.pull + "' is out of range.")
@@ -1745,7 +1745,7 @@ string.encodeUtf16 = function
     text = self
     result = ""
     for character in text
-        result = result + character.code.to_hex
+        result = result + character.code.toHex
     end for
     return result
 end function
