@@ -1,0 +1,19 @@
+// Checks if the string consists only of alphabetic characters.
+// @description **Description:**
+// @description - Iterates through each character in the string to check if all characters are alphabetic (letters only).
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the string is alphabetic, otherwise `false`.
+//
+// @example print "Hello".isalpha    // prints true
+// @example print "Hello123".isalpha // prints false
+string.isAlpha = function
+    for c in self.values
+        if not c.isIn("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") then return false
+    end for
+    return true
+end function

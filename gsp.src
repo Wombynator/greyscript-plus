@@ -6,14 +6,24 @@ import_code("src/general/min.src")
 
 import_code("src/logger/_logger.src") // Logging module
 
+import_code("src/map/add.src")
+
 import_code("src/number/toBin.src")
 import_code("src/number/toHex.src")
 import_code("src/number/toOct.src")
 
+import_code("src/string/bytes.src")
 import_code("src/string/color.src")
 import_code("src/string/compressLZ77.src")
+import_code("src/string/decodeBase64.src")
+import_code("src/string/decodeUrl.src")
+import_code("src/string/decodeUtf8.src")
+import_code("src/string/encodeBase64.src")
+import_code("src/string/encodeUrl.src")
 import_code("src/string/encodeUtf8.src")
 import_code("src/string/endsWith.src")
+import_code("src/string/isAlnum.src")
+import_code("src/string/isAlpha.src")
 import_code("src/string/isIn.src")
 import_code("src/string/isLower.src")
 import_code("src/string/isUpper.src")

@@ -1,0 +1,15 @@
+string.decodeBase64 = function
+    base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    binary_string = ""
+    data = self
+    data = data.rstrip("=")
+    for byte in data
+        binary_string = binary_string + base64_chars.indexOf(byte).toBin[2:].zfill(6)
+    end for
+    decoded = ""
+    for i in range(0, len(binary_string)-8, 8)
+        byte_segment = ("0b" + binary_string[i:i+8]).to_int
+        decoded = decoded + char(byte_segment)
+    end for
+    return decoded
+end function

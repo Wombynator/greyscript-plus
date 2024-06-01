@@ -1,0 +1,27 @@
+// Converts a string to a URL-encoded format using UTF-8 encoding for non-safe characters.
+// @description **Description:**
+// @description - Checks if each character is within the set of URL-safe characters.
+// @description - If not, the character is converted to its UTF-8 hexadecimal representation.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The URL-encoded string.
+//
+// @example print "Hello World!".encodeUrl           // prints "Hello%20World%21"
+// @example print "data=50&user=test user".encodeUrl // prints "data%3D50%26user%3Dtest%20user"
+string.encodeUrl = function
+    safe_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~"
+    
+    encoded_string = ""
+    for c in self
+        if c.isIn(safe_characters) then
+            encoded_string = encoded_string + c
+        else
+            encoded_string = encoded_string + c.encodeUtf8.replace("0x","%")
+        end if
+    end for
+    return encoded_string
+end function

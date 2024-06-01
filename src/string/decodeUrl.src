@@ -1,0 +1,41 @@
+// Decodes a URL-encoded string back into its original format.
+// @description **Description:**
+// @description - Iterates through the URL-encoded string and decodes each percent-encoded sequence into its original characters.
+// @description - Supports decoding multi-byte UTF-8 encoded characters.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The URL-decoded string.
+//
+// @example print "Hello%20World%21".decodeUrl               // prints "Hello World!"
+// @example print "data%3D50%26user%3Dtest%20user".decodeUrl // prints "data=50&user=test user"
+string.decodeUrl = function
+    decoded_text = ""
+    i = 0
+
+    encoded_text = self
+    // Decode each character in the input text
+    while i < len(encoded_text)
+        if encoded_text[i] != "%" then
+            if encoded_text[i] != char(0) then decoded_text = decoded_text + encoded_text[i]  // Add unencoded character
+            i = i + 1
+        else
+            // Collect all parts of a multi-byte character
+            bytes_sequence = ""
+            while i < len(encoded_text) and encoded_text[i] == "%"
+                hex_value = encoded_text[i:i+3]
+                bytes_sequence = bytes_sequence + hex_value
+                i = i + 3
+                if i < len(encoded_text) and encoded_text[i] != "%" then break // Next character is not part of the current encoded sequence
+                if i >= len(encoded_text) then break // Reached the end of the string
+            end while
+            
+            decoded_char = (bytes_sequence.replace("%","0x")).decodeUtf8  // Convert accumulated bytes back to character
+            decoded_text = decoded_text + decoded_char
+        end if
+    end while
+    return decoded_text
+end function
