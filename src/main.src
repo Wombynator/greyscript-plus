@@ -1732,23 +1732,12 @@ end function
 if not globals.hasIndex("GSP") then __scope
 globals.remove("__scope")
 
-//clear_screen
+test = "Hello World!123€€"
 
-min = 33
-max = 64
-text = ""
-for i in range(64)
-    text = text + char(floor(rnd * max))
-end for
+encoded = test.encodeUrl
+print encoded
 
-string.encodeUtf16 = function
-    text = self
-    result = ""
-    for character in text
-        result = result + character.code.toHex
-    end for
-    return result
-end function
+decoded = encoded.decodeUrl
+print decoded
 
-print range(max(0, 1 - 4095), 1)
-print compressLZ77("ababa")
+print (test == decoded)

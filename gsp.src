@@ -1,4 +1,5 @@
 import_code("src/general/__name__.src")
+import_code("src/general/colorMap.src")
 import_code("src/general/compressLZ77.src")
 import_code("src/general/decompressLZ77.src")
 import_code("src/general/max.src")

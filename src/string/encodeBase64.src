@@ -24,7 +24,7 @@ string.encodeBase64 = function
     binary_string = binary_string.reverse.zfill(binary_string.len + (6 - binary_string.len % 6) % 6).reverse
     encoded = ""
     for i in range(0, len(binary_string)-1, 6)
-        byte_segment = ("0b" + binary_string[i:i+6]).to_int
+        byte_segment = ("0b" + binary_string[i:i+6]).toInt
         encoded = encoded + base64_chars[byte_segment]
     end for
     while len(encoded) % 4 != 0

@@ -13,9 +13,10 @@
 number.toBin = function
     binary_str = ""
     if self == 0 then return "0b0"
-    while self > 0
-        binary_str = str(self % 2) + binary_str
-        dec = floor(self / 2)
+    dec = self
+    while dec > 0
+        binary_str = str(dec % 2) + binary_str
+        dec = floor(dec / 2)
     end while
     return "0b" + binary_str.lstrip("0")
 end function

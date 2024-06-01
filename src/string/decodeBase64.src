@@ -8,7 +8,7 @@ string.decodeBase64 = function
     end for
     decoded = ""
     for i in range(0, len(binary_string)-8, 8)
-        byte_segment = ("0b" + binary_string[i:i+8]).to_int
+        byte_segment = ("0b" + binary_string[i:i+8]).toInt
         decoded = decoded + char(byte_segment)
     end for
     return decoded

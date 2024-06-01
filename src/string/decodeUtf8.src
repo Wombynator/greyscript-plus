@@ -18,21 +18,21 @@ string.decodeUtf8 = function
     i = 0
     
     while i < len(utf8_bytes)
-        byte = utf8_bytes[i:i+4].to_int
+        byte = utf8_bytes[i:i+4].toInt
         
         if bitAnd(byte,128) == 0 then  // 1-byte character
             decoded_chars.push(char(byte))
         else if bitAnd(byte,224) == 192 then  // 2-byte character
             byte_sequence = bitAnd(byte,31) << 6
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63)
             decoded_chars.push(char(byte_sequence))
         else if bitAnd(byte,240) == 224 then  // 3-byte character
             byte_sequence = bitAnd(byte,15) << 12
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 6
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63) << 6
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63)
             decoded_chars.push(char(byte_sequence))
         else if bitAnd(byte,248) == 240 then  // 4-byte character
             logger.error("string.decodeUtf8", "FormatError: The bytes '" + utf8_bytes[i:i+4*4] + "' from input '" + self + "' are a 4-byte character and are currently not supported by Greyscript.") // !!! Throws Runtime error in script !!!
@@ -40,11 +40,11 @@ string.decodeUtf8 = function
             continue
             byte_sequence = bitAnd(byte,7) << 18
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 12
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63) << 12
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63) << 6
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63) << 6
             i = i + 4
-            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].to_int,63)
+            byte_sequence = byte_sequence | bitAnd(utf8_bytes[i:i+4].toInt,63)
             decoded_chars.push(char(byte_sequence))
         else
             logger.error("string.decodeUtf8", "FormatError: The byte '" + utf8_bytes[i:i+4] + "' from input '" + self + "' is out of range.")

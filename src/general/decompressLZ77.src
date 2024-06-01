@@ -17,13 +17,13 @@ globals.decompressLZ77 = function(text)
     table = []
 
     while bytes.len > 0
-        distance = (bytes[0] + bytes[1][2:-4]).to_int
-        length = ("0b" + bytes[1][-4:]).to_int
+        distance = (bytes[0] + bytes[1][2:-4]).toInt
+        length = ("0b" + bytes[1][-4:]).toInt
         bytes = bytes[2:]
         if bytes.len == 0 then
             character = ""
         else if bytes[0].startsWith("0b0") then // 1-byte character
-            character = char(bytes.pull.to_int)
+            character = char(bytes.pull.toInt)
         else if bytes[0].startsWith("0b110") then // 2-byte character
             character = (bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
         else if bytes[0].startsWith("0b1110") then // 3-byte character
