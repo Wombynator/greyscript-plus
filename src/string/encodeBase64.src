@@ -17,10 +17,8 @@
 string.encodeBase64 = function
     base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     binary_string = ""
-    data = self
-    for byte in data
-        binary_string = binary_string + code(byte).toBin[2:].zfill(8)
-    end for
+    binary_string = self.encodeUtf8.bytes.join("").replace("0b","")
+
     binary_string = binary_string.reverse.zfill(binary_string.len + (6 - binary_string.len % 6) % 6).reverse
     encoded = ""
     for i in range(0, len(binary_string)-1, 6)

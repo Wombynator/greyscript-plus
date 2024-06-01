@@ -17,16 +17,17 @@
 // @example print "0o7".zfill(4)   // prints "0o0007"
 string.zfill = function(width)
     s = self
-    if self.startsWith("0b") or self.startsWith("0x") or self.startsWith("0o") then s = s[2:]
+    if self.len > 1 and (self.startsWith("0b") or self.startsWith("0x") or self.startsWith("0o")) then s = s[2:]
     zeros_needed = width - s.len
     if zeros_needed > 0 then s = "0" * zeros_needed + s
-    if self.startsWith("0b") then
-        return "0b" + s
-    else if self.startsWith("0x") then
-        return "0x" + s
-    else if self.startsWith("0o") then
-        return "0o" + s
-    else
-        return s
+    if self.len > 1 then
+        if self.startsWith("0b") then
+            return "0b" + s
+        else if self.startsWith("0x") then
+            return "0x" + s
+        else if self.startsWith("0o") then
+            return "0o" + s
+        end if
     end if
+    return s
 end function
