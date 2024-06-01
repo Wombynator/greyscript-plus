@@ -1,0 +1,20 @@
+// Removes TextMesh Pro tags from a string.
+// @description **Description:**
+// @description - This function iteratively searches for and removes text enclosed within "<" and ">" characters, effectively stripping TextMesh Pro tags from the string.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The modified string with all TextMesh Pro tags removed.
+//
+// @example print "<b>Hello</b>".removeTags              // prints "Hello"
+// @example print "<color=#FF0000>Hi</color>".removeTags // prints "Hi"
+string.removeTags = function
+    s = self
+    while "<".isIn(s) and ">".isIn(s)
+        s = s[:s.indexOf("<")] + s[s.indexOf(">")+1:]
+    end while
+    return s
+end function

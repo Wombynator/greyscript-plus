@@ -1,0 +1,17 @@
+// Checks if the string is entirely in uppercase.
+// @description **Description:**
+// @description - Determines if all alphabetic characters in the string are uppercase.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the string is entirely uppercase, otherwise returns `false`.
+//
+// @example print "HELLO".isUpper // prints true
+// @example print "Hello".isUpper // prints false
+// @example print "12345".isUpper // prints true, as there are no lowercase letters to compare
+string.isUpper = function
+    return self == self.upper
+end function

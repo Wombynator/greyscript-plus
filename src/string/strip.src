@@ -1,0 +1,29 @@
+// Strips characters from both ends of a string.
+// @description **Description:**
+// @description - Removes all instances of the specified characters from the beginning and end of the string.
+// @description - If no characters are specified, it defaults to removing whitespace characters (space, tab, newline, carriage return, form feed, and vertical tab).
+//
+// @description **Parameters:**
+// @param {string} chars
+// @description `chars: string` The string containing characters to be removed from both ends of the calling string. If not specified, defaults to whitespace characters.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The modified string with the specified characters removed from both ends.
+//
+// @example print "  Hello  ".strip                      // prints "Hello"
+// @example print "xxGreyHackxx".strip("x")              // prints "GreyHack"
+// @example print (char(10) + "World!" + char(10)).strip // prints "World!"
+string.strip = function(chars = null)
+    if chars == null then chars = " " + char(9)+char(10)+char(13)+char(12)+char(11)
+    s = self
+    sStart = 0
+    sEnd = s.len - 1
+    while sStart <= sEnd and s[sStart].isIn(chars)
+        sStart = sStart + 1
+    end while
+    while sEnd >= sStart and s[sEnd].isIn(chars)
+        sEnd = sEnd - 1
+    end while
+    return s[sStart:sEnd+1]
+end function

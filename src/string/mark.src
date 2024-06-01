@@ -1,0 +1,30 @@
+// Applies a highlight to a string using both hexadecimal codes and named colors.
+// @description **Description:**
+// @description - For hex codes: Converts codes prefixed with `0x` to start with `#`.
+// @description - For named colors: Looks up and applies the corresponding hex code from `colorMap`.
+// @description - Alpha Handling: Automatically appends `55` for semi transparency if not specified in the color code.
+//
+// @description **Parameters:**
+// @param {string} value
+// @description `value: string` The color to apply. Can be a hex code in `#FF4130` or `0xFF4130` format, a named color from `colorMap`, or a hex code with alpha value like `#ff000088`.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` A highlighted string wrapped in `<mark>` tags. If the color code is invalid, it logs an error and returns the original string.
+//
+// @example print "Hello".mark("0xff0000")  // prints "Hello" with red hightlight
+// @example print "Grey".mark("#00FF00")    // prints "Grey" whith green hightlight
+// @example print "Hack".mark("blue")       // prints "Hack" in blue hightlight
+// @example print "World".mark("#ff000088") // prints "World" with red hightlight with 88 alpha
+// @example print ":)".mark("#ffFF0011")    // prints ":)" with yellow hightlight with 11 alpha
+string.mark = function(value)
+    if colorMap.hasIndex(value.lower) then value = colorMap[value.lower]
+    if value.startsWith("0x") then value = "#" + value[2:]
+    if value.startsWith("#") then
+        if value.len == 7 then value = value + "55"
+        if value.len == 8 then value = value + value[-1]
+        return "<mark=" + value + ">" + self + "</mark>"
+    end if
+    logger.error("string.mark", "ValueError: Invalid color specification '" + value + "'. Must be a valid hex code or a named color in colorMap. Encountered in string: '" + self + "'.")
+    return self
+end function
