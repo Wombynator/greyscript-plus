@@ -1,0 +1,48 @@
+globals.compressLZ77 = function(text)
+    i = 0
+    n = text.len
+    window_size = 4095
+    buffer_size = 15
+    table = []
+
+    while i < n
+        match_length = 0
+        match_distance = 0
+        // Ensure the start of the window is not negative
+        if i != 0 then
+            for j in range(max(0, i - window_size), i - 1)
+                k = 0
+                while k < buffer_size and i + k < n and text[j + k] == text[i + k] and k < (i - j)
+                    k = k + 1
+                end while
+                if k > match_length then
+                    match_length = k
+                    match_distance = i - j
+                end if
+            end for
+        end if
+        
+        if match_length > 0 then
+            if i + match_length < n then
+                next_char = text[i + match_length]
+            else
+                next_char = ""
+            end if
+            table.push([match_distance, match_length, next_char])
+            i = i + match_length + 1
+        else
+            table.push([0, 0, text[i]])
+            i = i + 1
+        end if
+    end while
+    
+    binaryString = ""
+    result = []
+    for tuple in table
+        binaryString = binaryString + tuple[0].toBin.zfill(12) + tuple[1].toBin.zfill(4)[2:] + tuple[2].encodeUtf8.toBin.zfill(8)
+    end for
+
+    for byte in binaryString.bytes
+        result.push(byte.toHex.decodeUtf8)
+    end for
+end function

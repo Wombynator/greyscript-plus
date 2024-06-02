@@ -1,0 +1,56 @@
+globals.decompressLZ77 = function(text)
+    i = 0
+    result = ""
+    bytes = "0b"
+    for j in range(0, text.len, 3)
+        if text.len - j == 2 then
+            bytes = bytes + text[j].code.toBin[2:].zfill(8) + text[j + 1].code.toBin[2:].zfill(8)
+        else if text.len - j == 0 then
+        else
+            bytes = bytes + text[j].code.toBin[2:].zfill(8) + text[j + 1].code.toBin[2:].zfill(8)
+            for byte in text[j+2].encodeUtf8.bytes
+                bytes = bytes + byte[2:]
+            end for
+        end if
+    end for
+    bytes = bytes.bytes
+    table = []
+
+    while bytes.len > 0
+        distance = (bytes[0] + bytes[1][2:-4]).toInt
+        length = ("0b" + bytes[1][-4:]).toInt
+        bytes = bytes[2:]
+        if bytes.len == 0 then
+            character = ""
+        else if bytes[0].startsWith("0b0") then // 1-byte character
+            character = char(bytes.pull.toInt)
+        else if bytes[0].startsWith("0b110") then // 2-byte character
+            character = (bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
+        else if bytes[0].startsWith("0b1110") then // 3-byte character
+            character = (bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
+        else if bytes[0].startsWith("0b11110") then // 4-byte character
+            logger.error("decompressLZ77", "FormatError: The input bytes '" + [bytes.pull,bytes.pull,bytes.pull,bytes.pull].join(" ") + "' (UTF-8: " + [bytes.pull.toHex,bytes.pull.toHex,bytes.pull.toHex,bytes.pull.toHex].join("") + ") is currently not supported by Greyscript.")
+            //character = (bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex + bytes.pull.toHex).decodeUtf8
+            character = ""
+        else
+            logger.error("decompressLZ77", "FormatError: The input byte '" + bytes.pull + "' is out of range.")
+            character = ""
+        end if
+        table.push([distance,length,character])
+    end while
+    for tuple in table
+        if tuple[1] == 0 then
+            result = result + tuple[2]
+        else
+            distance = tuple[0]
+            length = tuple[1]
+            if distance != length then
+                result = result + result[-1 * distance: -1 * distance + length] + tuple[2]
+            else
+                result = result + result[-1 * distance:] + tuple[2]
+            end if
+        end if
+    end for
+
+    return result
+end function

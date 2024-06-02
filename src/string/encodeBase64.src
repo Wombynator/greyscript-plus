@@ -1,0 +1,32 @@
+// Encodes a string into Base64 format.
+// @description **Description:**
+// @description - Converts each character in the input string into its ASCII binary equivalent, concatenates them into a single binary string.
+// @description - Reverses the binary string temporarily to pad it on the right until its length is a multiple of 6 bits, then reverts the order for encoding.
+// @description - Splits the padded binary string into 6-bit segments and uses each segment to look up a corresponding character in a Base64 character set.
+// @description - Appends '=' to the result to make the final string length a multiple of 4.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The encoded string in Base64 format.
+//
+// @example print "hello".encodeBase64()    // prints "aGVsbG8="
+// @example print "Greyscript".encodeBase64() // prints "R3JleXNjcmlwdA=="
+string.encodeBase64 = function
+    base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    binary_string = ""
+    binary_string = self.encodeUtf8.bytes.join("").replace("0b","")
+
+    binary_string = binary_string.reverse.zfill(binary_string.len + (6 - binary_string.len % 6) % 6).reverse
+    encoded = ""
+    for i in range(0, len(binary_string)-1, 6)
+        byte_segment = ("0b" + binary_string[i:i+6]).toInt
+        encoded = encoded + base64_chars[byte_segment]
+    end for
+    while len(encoded) % 4 != 0
+        encoded = encoded + "="
+    end while
+    return encoded
+end function

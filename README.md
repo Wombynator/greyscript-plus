@@ -43,9 +43,9 @@ import_code("greyscript-plus/gsp.src")
   - [Map](#map)
     - [`map.add`](#%EF%B8%8F-mapadd-key-string-value-any-map)
   - [Number](#number)
-    - [`number.to_oct`]()
-    - [`number.to_bin`]()
-    - [`number.to_hex`]()
+    - [`number.toOct`]()
+    - [`number.toBin`]()
+    - [`number.toHex`]()
   - [String](#string)
     - [`string.bytes`]()
     - [`string.encodeUtf8`]()
@@ -54,10 +54,10 @@ import_code("greyscript-plus/gsp.src")
     - [`string.decodeUrl`]()
     - [`string.encodeBase64`]()
     - [`string.decodeBase64`]()
-    - [`string.to_oct`]()
-    - [`string.to_bin`]()
-    - [`string.to_hex`]()
-    - [`string.to_int`]()
+    - [`string.toOct`]()
+    - [`string.toBin`]()
+    - [`string.toHex`]()
+    - [`string.toInt`]()
     - [`string.zfill`]()
     - [`string.reverse`]()
     - [`string.isLower`]()
@@ -140,9 +140,9 @@ logger.info("main", "Info message...")
 ✔️ **map.add** Adds a key-value pair to a map.
 
 ## Number
-✔️ **number.to_oct** Converts a number into its octal form.<br>
-✔️ **number.to_bin** Converts a number into its binary form.<br>
-✔️ **number.to_hex** Converts a number into its hexadecimal form.
+✔️ **number.toOct** Converts a number into its octal form.<br>
+✔️ **number.toBin** Converts a number into its binary form.<br>
+✔️ **number.toHex** Converts a number into its hexadecimal form.
 
 ## String
 ✔️ **string.bytes** Converts a string into an array of bytes.<br>
@@ -152,10 +152,10 @@ logger.info("main", "Info message...")
 ✔️ **string.decodeUrl** Decodes a string from Url format.<br>
 ✔️ **string.encodeBase64** Encodes a string to Base 64.<br>
 ✔️ **string.decodeBase64** Decodes a string from Base 64.<br>
-✔️ **string.to_oct** Converts the string representation of a number into its octal form.<br>
-✔️ **string.to_bin** Converts the string representation of a number into its binary form.<br>
-✔️ **string.to_hex** Converts the string representation of a number into its hexadecimal form.<br>
-✔️ **string.to_int** Converts a string representation of a number into an integer.<br>
+✔️ **string.toOct** Converts the string representation of a number into its octal form.<br>
+✔️ **string.toBin** Converts the string representation of a number into its binary form.<br>
+✔️ **string.toHex** Converts the string representation of a number into its hexadecimal form.<br>
+✔️ **string.toInt** Converts a string representation of a number into an integer.<br>
 ✔️ **string.zfill** Fills the string with leading zeros to reach a specified width.<br>
 ❌ **string.lfill** Fills the string with leading characters to reach a specified width.<br>
 ❌ **string.rfill** Fills the string with ending characters to reach a specified width.<br>

@@ -1,0 +1,14 @@
+globals.logger = {}
+
+globals.logger.state = "trace" // accepts "normal", "debug" and "trace"
+
+get_shell.host_computer.touch(launch_path.split("/")[:-1].join("/"), launch_path.split("/")[-1] + ".log")
+globals.logger.file = get_shell.host_computer.File(launch_path + ".log")
+globals.logger.file.set_content("Started new log on " + current_date)
+
+import_code("info.src")
+import_code("debug.src")
+import_code("trace.src")
+import_code("warn.src")
+import_code("error.src")
+import_code("fatal.src")

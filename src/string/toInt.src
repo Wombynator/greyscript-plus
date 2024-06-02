@@ -1,0 +1,48 @@
+// Converts a string representation of a number into an integer.
+// @description **Description:**
+// @description - Converts binary (`0b` prefix), octal (`0o` prefix), hexadecimal (`0x` prefix), or decimal (no prefix) string representations of numbers into their integer value. The conversion is based on the prefix of the string.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {integer}
+// @description `integer` The integer value of the number represented by the string.
+//
+// @example print "0b1010".toInt // prints 10 (binary to decimal conversion)
+// @example print "0o123".toInt  // prints 83 (octal to decimal conversion)
+// @example print "0x1A".toInt   // prints 26 (hexadecimal to decimal conversion)
+// @example print "123".toInt    // prints 123 (direct conversion)
+string.toInt = function
+    decimal = 0
+    if self.startsWith("0b") then
+        for i in range(self[2:].len - 1)
+            decimal = decimal + to_int(self.reverse[i]) * (2 ^ i)
+        end for
+        return decimal
+    else if self.startsWith("0o") then
+        for i in range(self[2:].len - 1)
+            decimal = decimal + to_int(self.reverse[i]) * (8 ^ i)
+        end for
+        return decimal
+    else if self.startsWith("0x") then
+        hex_digits = {"0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
+        for i in range(self[2:].len - 1)
+            decimal = decimal + hex_digits[self.reverse[i].upper] * (16 ^ i)
+        end for
+        return decimal
+    else
+        if self.len < 10 then return to_int(self)
+        data = self
+        result = 0
+        i = 0
+        while data.len >= 10
+            temp = to_int(data[-9:])
+            data = data[:-9]
+            result = result + (temp * (1000000000^i))
+            i = i + 1
+        end while
+        result = result + (to_int(data) * (1000000000^i))
+        return result
+    end if
+end function

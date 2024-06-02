@@ -1,0 +1,3 @@
+string.compressLZ77 = function
+    return compressLZ77(self)
+end function

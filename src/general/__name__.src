@@ -1,0 +1,19 @@
+// Determines the execution context of the script.
+// @description **Description:**
+// @description - This function checks if the script is being run as the main program or as an imported module.
+// @description - If the script's `program_path` is the same as `launch_path`, it indicates the script is executed as the main program and returns `"__main__"`.
+// @description - If the script is being run from a different script using `launch()`, it extracts and returns the script name from the `launch_path`.
+//
+// @description **Parameters:**
+// @description None.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` Returns `"__main__"` if the script is the main program, otherwise returns the script name extracted from `launch_path`.
+//
+// @example when script run directly: print __name__ // prints "__main__"
+// @example when script imported:     print __name__ // prints the script name, e.g., "module_name"
+globals.__name__ = function
+    if program_path == launch_path then return "__main__"
+    return launch_path.split("/")[-1]
+end function

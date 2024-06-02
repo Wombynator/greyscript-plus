@@ -1,0 +1,26 @@
+// Strips characters from the beginning of a string.
+// @description **Description:**
+// @description - Removes all instances of the specified characters from the beginning of the string.
+// @description - If no characters are specified, it defaults to removing whitespace characters (space, tab, newline, carriage return, form feed, and vertical tab).
+//
+// @description **Parameters:**
+// @param {string} chars
+// @description `chars: string` The string containing characters to be removed from the beginning of the calling string. If not specified, defaults to whitespace characters.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The modified string with the specified characters removed from the beginning.
+//
+// @example print "  Hello  ".lstrip          // prints "Hello  "
+// @example print "xxHelloxx".lstrip("x")     // prints "Helloxx"
+// @example print (char(10) + "Hello").lstrip // prints "Hello"
+string.lstrip = function(chars = null)
+    if chars == null then chars = " " + char(9)+char(10)+char(13)+char(12)+char(11)
+    s = self
+    sStart = 0
+    sEnd = s.len - 1
+    while sStart <= sEnd and s[sStart].isIn(chars)
+        sStart = sStart + 1
+    end while
+    return s[sStart:]
+end function

@@ -1,0 +1,19 @@
+// Checks if the string consists only of alphanumeric characters.
+// @description **Description:**
+// @description - Iterates through each character in the string to check if all characters are alphanumeric (letters and numbers).
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the string is alphanumeric, otherwise `false`.
+//
+// @example print "Hello123".isalnum  // prints true
+// @example print "Hello!".isalnum    // prints false
+string.isAlnum = function
+    for c in self.values
+        if not c.isIn("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") then return false
+    end for
+    return true
+end function

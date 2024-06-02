@@ -1,0 +1,17 @@
+// Checks if the current string is contained within the specified string.
+// @description **Description:**
+// @description - Determines if the string upon which this method is called (`self`) is found within the string passed as a parameter (`value`).
+//
+// @description **Parameters:**
+// @param {string} value
+// @description `value: string` The string within which to search for the current string (`self`).
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the current string (`self`) is found within the specified string (`value`), otherwise returns `false`.
+//
+// @example print "ell".isIn("Hello")    // prints true
+// @example print "bye!".isIn("Goodbye") // prints false
+string.isIn = function(value)
+    return value.indexOf(self) != null
+end function

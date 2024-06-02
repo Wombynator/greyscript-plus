@@ -1,0 +1,22 @@
+// Converts a number into its binary form.
+// @description **Description:**
+// @description - Converts the number it is called on into binary form.
+//
+// @description **Parameters:**
+// @description None. The function operates on the number object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The binary representation of the number, prefixed with `0b`.
+//
+// @example print 123.toBin // prints "0b1111011" (decimal to binary conversion)
+number.toBin = function
+    binary_str = ""
+    if self == 0 then return "0b0"
+    dec = self
+    while dec > 0
+        binary_str = str(dec % 2) + binary_str
+        dec = floor(dec / 2)
+    end while
+    return "0b" + binary_str.lstrip("0")
+end function

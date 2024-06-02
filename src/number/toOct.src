@@ -1,0 +1,23 @@
+// Converts a number into its octal form.
+// @description **Description:**
+// @description - Converts the number it is called on into octal form.
+//
+// @description **Parameters:**
+// @description None. The function operates on the number object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The octal representation of the number, prefixed with `0x`.
+//
+// @example print 123.toOct // prints "0o173" (decimal to octal conversion)
+number.toOct = function
+    oct_digits = "01234567"
+    oct_result = ""
+    if self == 0 then return "0o0"
+    while self > 0
+        remainder = self % 8
+        oct_result = oct_digits[remainder] + oct_result
+        dec = floor(self / 8)
+    end while
+    return "0o" + oct_result.lstrip("0")
+end function

@@ -1,0 +1,17 @@
+// Checks if the string is entirely in lowercase.
+// @description **Description:**
+// @description - Determines if all alphabetic characters in the string are lowercase.
+//
+// @description **Parameters:**
+// @description None. The function operates on the string object it is called on (`self`).
+//
+// @description **Returns:**
+// @return {number}
+// @description `number` Returns `true` if the string is entirely lowercase, otherwise returns `false`.
+//
+// @example print "hello".isLower // prints true
+// @example print "Hello".isLower // prints false
+// @example print "12345".isLower // prints true, as there are no uppercase letters to compare
+string.isLower = function
+    return self == self.lower
+end function
