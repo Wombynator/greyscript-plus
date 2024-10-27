@@ -1,6 +1,6 @@
 # Greyscript Plus Library for game [Grey Hack](https://store.steampowered.com/app/605230/Grey_Hack/)
 
-Library to enhance the ingame language GreyScript ([documentation](https://documentation.greyscript.org/))
+Library to enhance the ingame language GreyScript ([unofficial docs](https://documentation.greyscript.org/))
 
 # Installation
 
