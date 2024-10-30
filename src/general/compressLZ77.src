@@ -1,48 +1,52 @@
-globals.compressLZ77 = function(text)
-    i = 0
-    n = text.len
-    window_size = 4095
-    buffer_size = 15
-    table = []
+// LZ77 compression function
+globals.compressLZ77 = function(input_data)
+    // Parameters for the LZ77 algorithm
+    search_buffer_size = 4095          // Size of the search buffer
+    lookahead_buffer_size = 15         // Size of the lookahead buffer
+    minimum_match_length = 2           // Minimum length to consider a match
 
-    while i < n
-        match_length = 0
-        match_distance = 0
-        // Ensure the start of the window is not negative
-        if i != 0 then
-            for j in range(max(0, i - window_size), i - 1)
-                k = 0
-                while k < buffer_size and i + k < n and text[j + k] == text[i + k] and k < (i - j)
-                    k = k + 1
-                end while
-                if k > match_length then
-                    match_length = k
-                    match_distance = i - j
+    position = 0                       // Current position in the input data
+    output = []                        // List to store the compressed output
+
+    while position < input_data.len
+        max_match_length = 0
+        best_offset = 0
+
+        // Determine the start position of the search buffer
+        search_start = max(0, position - search_buffer_size)
+        max_offset = position - search_start
+
+        // Search for the longest match in the search buffer
+        for offset in range(1, max_offset + 1)
+            length = 0
+            while length < lookahead_buffer_size and (position + length) < input_data.len
+                search_index = position - offset + length
+                // Ensure search_index is within bounds
+                if search_index >= 0 and input_data[search_index] == input_data[position + length] then
+                    length = length + 1
+                else
+                    break
                 end if
-            end for
-        end if
-        
-        if match_length > 0 then
-            if i + match_length < n then
-                next_char = text[i + match_length]
-            else
-                next_char = ""
+            end while
+
+            if length > max_match_length then
+                max_match_length = length
+                best_offset = offset
             end if
-            table.push([match_distance, match_length, next_char])
-            i = i + match_length + 1
+        end for
+
+        if max_match_length >= minimum_match_length then
+            // Output a match token
+            token = { "offset": best_offset, "length": max_match_length }
+            output.push(token)
+            position = position + max_match_length
         else
-            table.push([0, 0, text[i]])
-            i = i + 1
+            // Output a literal token
+            token = { "offset": 0, "length": 0, "char": input_data[position] }
+            output.push(token)
+            position = position + 1
         end if
     end while
-    
-    binaryString = ""
-    result = []
-    for tuple in table
-        binaryString = binaryString + tuple[0].toBin.zfill(12) + tuple[1].toBin.zfill(4)[2:] + tuple[2].encodeUtf8.toBin.zfill(8)
-    end for
 
-    for byte in binaryString.bytes
-        result.push(byte.toHex.decodeUtf8)
-    end for
+    return output
 end function
