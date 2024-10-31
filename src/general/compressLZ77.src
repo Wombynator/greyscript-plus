@@ -1,52 +1,56 @@
 // LZ77 compression function
 globals.compressLZ77 = function(input_data)
-    // Parameters for the LZ77 algorithm
-    search_buffer_size = 4095          // Size of the search buffer
-    lookahead_buffer_size = 15         // Size of the lookahead buffer
-    minimum_match_length = 2           // Minimum length to consider a match
+    if input_data != null then
+        // Parameters for the LZ77 algorithm
+        search_buffer_size = 4095          // Size of the search buffer
+        lookahead_buffer_size = 15         // Size of the lookahead buffer
+        minimum_match_length = 2           // Minimum length to consider a match
 
-    position = 0                       // Current position in the input data
-    output = []                        // List to store the compressed output
+        position = 0                       // Current position in the input data
+        output = []                        // List to store the compressed output
 
-    while position < input_data.len
-        max_match_length = 0
-        best_offset = 0
+        while position < input_data.len
+            max_match_length = 0
+            best_offset = 0
 
-        // Determine the start position of the search buffer
-        search_start = max(0, position - search_buffer_size)
-        max_offset = position - search_start
+            // Determine the start position of the search buffer
+            search_start = max(0, position - search_buffer_size)
+            max_offset = position - search_start
 
-        // Search for the longest match in the search buffer
-        for offset in range(1, max_offset + 1)
-            length = 0
-            while length < lookahead_buffer_size and (position + length) < input_data.len
-                search_index = position - offset + length
-                // Ensure search_index is within bounds
-                if search_index >= 0 and input_data[search_index] == input_data[position + length] then
-                    length = length + 1
-                else
-                    break
+            // Search for the longest match in the search buffer
+            for offset in range(1, max_offset + 1)
+                length = 0
+                while length < lookahead_buffer_size and (position + length) < input_data.len
+                    search_index = position - offset + length
+                    // Ensure search_index is within bounds
+                    if search_index >= 0 and input_data[search_index] == input_data[position + length] then
+                        length = length + 1
+                    else
+                        break
+                    end if
+                end while
+
+                if length > max_match_length then
+                    max_match_length = length
+                    best_offset = offset
                 end if
-            end while
+            end for
 
-            if length > max_match_length then
-                max_match_length = length
-                best_offset = offset
+            if max_match_length >= minimum_match_length then
+                // Output a match token
+                token = { "offset": best_offset, "length": max_match_length }
+                output.push(token)
+                position = position + max_match_length
+            else
+                // Output a literal token
+                token = { "offset": 0, "length": 0, "char": input_data[position] }
+                output.push(token)
+                position = position + 1
             end if
-        end for
-
-        if max_match_length >= minimum_match_length then
-            // Output a match token
-            token = { "offset": best_offset, "length": max_match_length }
-            output.push(token)
-            position = position + max_match_length
+        end while
         else
-            // Output a literal token
-            token = { "offset": 0, "length": 0, "char": input_data[position] }
-            output.push(token)
-            position = position + 1
-        end if
-    end while
-
+            logger.error("compressLZ77", "input_data cannot be null.")
+            return input_data
+    end if
     return output
 end function

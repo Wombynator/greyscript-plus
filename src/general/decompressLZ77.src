@@ -9,13 +9,15 @@ globals.decompressLZ77 = function(compressed_data)
       else
          // Match token: Copy substring from output
          start = output.len - token.offset
+         length = token.length
 
          // Ensure indices are within bounds
          if start >= 0 then
-            while token.length > 0
-               substring = output[start : start + token.length]
+            while token.length > 0 and length > 0
+               substring = output[start : start + length]
                output = output + substring
-               token.length = token.length - token.offset
+               length = length - token.offset
+               start = start + token.offset
             end while
          else
             // Invalid offset or length
