@@ -1,4 +1,5 @@
 import_code("src/general/__name__.src")
+import_code("src/general/AES128")
 import_code("src/general/colorMap.src")
 import_code("src/general/compressLZ77.src")
 import_code("src/general/decompressLZ77.src")
@@ -13,6 +14,7 @@ import_code("src/number/toBin.src")
 import_code("src/number/toHex.src")
 import_code("src/number/toOct.src")
 
+import_code("src/string/AES128.src")
 import_code("src/string/bytes.src")
 import_code("src/string/color.src")
 import_code("src/string/compressLZ77.src")

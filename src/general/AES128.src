@@ -1,0 +1,60 @@
+// Provides AES-128 encryption and decryption methods for strings.
+// @description **Description:**
+// @description - Extends the string object with AES-128 encryption and decryption capabilities.
+// @description - Allows encryption and decryption of strings using a 16-character key.
+// @description - The `encode` method encrypts the string, and the `decode` method decrypts it.
+//
+// @description **Parameters:**
+// @description None.
+//
+// @description **Returns:**
+// @return {map{string}}
+// @description An object containing the `encode` and `decode` functions for AES-128 encryption and decryption.
+//
+// @example // Encrypt a string:
+// @example encrypted = AES128.encode("Hello World", "mysecretkey12345")            // Result: L10DVmZ/2Ol2Tgau9H+VnA
+// @example // Decrypt a string:
+// @example decrypted = AES128.decode("L10DVmZ/2Ol2Tgau9H+VnA", "mysecretkey12345") // Result: Hello World
+globals.AES128 = {}
+
+// Encrypts the string using AES-128 encryption.
+// @description **Description:**
+// @description - Encrypts the string using the AES-128 encryption algorithm.
+// @description - Requires a 16-character key for encryption.
+// @description - Outputs a Base64-encoded string representing the encrypted data.
+//
+// @description **Parameters:**
+// @param {string} data
+// @param {string} key
+// @description `data: string` The string to encode.
+// @description `key: string` A 16-character string used as the encryption key.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` A Base64-encoded string representing the encrypted data.
+//
+// @example print AES128.encode("Hello World", "mysecretkey12345") // prints L10DVmZ/2Ol2Tgau9H+VnA
+globals.AES128.encode = function(data,key)
+    return data.AES128.encode(key)
+end function
+
+// Decrypts the string using AES-128 decryption.
+// @description **Description:**
+// @description - Decrypts an AES-128 encrypted Base64-encoded string.
+// @description - Requires the same 16-character key that was used for encryption.
+// @description - Returns the original decrypted string.
+//
+// @description **Parameters:**
+// @param {string} data
+// @param {string} key
+// @description `data: string` The string to encode.
+// @description `key: string` A 16-character string used as the decryption key.
+//
+// @description **Returns:**
+// @return {string}
+// @description `string` The decrypted string.
+//
+// @example print AES128.decode("L10DVmZ/2Ol2Tgau9H+VnA", "mysecretkey12345") // prints Hello World
+globals.AES128.decode = function(data,key)
+    return data.AES128.decode(key)
+end function
