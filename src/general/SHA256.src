@@ -1,0 +1,3 @@
+globals.SHA256 = function(data)
+    return data.SHA256
+end function

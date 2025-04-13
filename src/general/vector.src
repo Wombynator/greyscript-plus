@@ -1,0 +1,76 @@
+globals.Vector = {}
+
+globals.Vector.magnitude = function(v1)
+    result = 0
+    for dimension in v1
+        result = result + dimension^2
+    end for
+    return abs(sqrt(result))
+end function
+
+globals.Vector.add = function(v1, v2)
+    if v1 isa number and v2 isa number then
+        logger.warn("Vector.add", "Inputs are numbers: performing scalar addition: " + str(v1) + ", " + str(v2) + ".")
+        return [v1 + v2]
+    else if v1 isa number then 
+        logger.info("Vector.add", "Input conversion: First argument is a number: " + str(v1) + " Converting to a list. Expected length: " + str(v2.len) + ".")
+        v1 = [v1] * (v2.len)
+    else if v2 isa number then
+        logger.info("Vector.add", "Input conversion: Second argument is a number: " + str(v2) + " Converting to a list. Expected length: " + str(v1.len) + ".")
+        v2 = [v2] * (v1.len)
+    end if
+    if not v1 isa list and not v2 isa list then
+        logger.error("Vector.add", "Addition failed: Both inputs must be lists or compatible types. Received types - v1: '" + typeof(v1) + "', v2: '" + typeof(v2) + "'.")
+        return null
+    end if
+
+    result = []
+    for dimension in range(0,max(v1.len,v2.len)-1)
+        if dimension > v1.len-1 then
+            result.push(v2[dimension])
+        else if dimension > v2.len-1 then
+            result.push(v1[dimension])
+        else
+            result.push(v1[dimension] + v2[dimension])
+        end if
+    end for
+    return result
+end function
+
+globals.Vector.sub = function (v1, v2)
+    result = []
+    for dimension in range(0,max(v1.len,v2.len)-1)
+        if dimension > v1.len-1 then
+            result.push(0-v2[dimension])
+        else if dimension > v2.len-1 then
+            result.push(v1[dimension])
+        else
+            result.push(v1[dimension] - v2[dimension])
+        end if
+    end for
+    return result
+end function
+
+globals.Vector.scalarMul = function(v1, scalar)
+    result = []
+    for dimension in v1
+            result.push(dimension * scalar)
+    end for
+    return result
+end function
+
+globals.Vector.scalarDiv = function(v1, scalar)
+    result = []
+    for dimension in v1
+            result.push(dimension / scalar)
+    end for
+    return result
+end function
+
+globals.Vector.dotProduct = function(v1, v2)
+    result = 0
+    for dimension in range(0,min(v1.len,v2.len)-1)
+        result = result + v1[dimension] * v2[dimension]
+    end for
+    return result
+end function
